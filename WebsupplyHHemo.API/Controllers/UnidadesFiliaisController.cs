@@ -4,11 +4,11 @@ namespace WebsupplyHHemo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CadastroUnidadesFiliaisController : ControllerBase
+    public class UnidadesFiliaisController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        public CadastroUnidadesFiliaisController(IConfiguration configuration)
+        public UnidadesFiliaisController(IConfiguration configuration)
         {
             _configuration = configuration;
         }

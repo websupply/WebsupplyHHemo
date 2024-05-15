@@ -4,7 +4,7 @@ using WebsupplyHHemo.API.Models;
 
 namespace WebsupplyHHemo.API.ADO
 {
-    public class CadastroUnidadesFiliaisADO
+    public class UnidadesFiliaisADO
     {
         public static CadastroUnidadesFiliaisResponseDto CADASTRO_UNIDADES_FILIAIS(string Connection, string CGCMatriz, UserModel userModel, CadastroUnidadesFiliaisRequestDto requestDto)
         {
