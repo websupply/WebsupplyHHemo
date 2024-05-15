@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.Interface", "WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj", "{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.API", "WebsupplyHHemo.API\WebsupplyHHemo.API.csproj", "{D19E935F-3897-4073-8566-4FDC4FF533CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D78AEA6B-D821-4C1D-9723-F6D2D578F191}
+	EndGlobalSection
+EndGlobal
