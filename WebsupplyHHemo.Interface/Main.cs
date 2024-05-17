@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebsupplyHHemo.Interface
 {
-    public class CadastroUnidadesFiliais
+    public class Main
     {
     }
 }

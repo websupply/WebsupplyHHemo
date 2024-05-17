@@ -1,6 +1,6 @@
 ﻿namespace WebsupplyHHemo.API.Dto
 {
-    public class CadastroUnidadesFiliaisResponseDto
+    public class CadastroUnidadesResponseDto
     {
         public int CODUnidade { get; set; }
         public int Erro { get; set; }
