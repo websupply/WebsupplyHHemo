@@ -57,12 +57,18 @@
     <Compile Include="Metodos\FormaPagtoMetodo.cs" />
     <Compile Include="Metodos\Mod_Gerais.cs" />
     <Compile Include="Metodos\UnidadeMedidaMetodo.cs" />
+    <Compile Include="Metodos\UsuarioMetodo.cs" />
     <Compile Include="Model\CentroCustoModel.cs" />
     <Compile Include="Model\FormaPagtoModel.cs" />
     <Compile Include="Model\CondicaoPagtoModel.cs" />
+    <Compile Include="Model\NaturezaModel.cs" />
+    <Compile Include="Model\PlanoContaModel.cs" />
+    <Compile Include="Model\TipoOperacaoModel.cs" />
     <Compile Include="Model\UnidadeMedidaModel.cs" />
     <Compile Include="Model\UnidadeModel.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Model\UsuarioModel.cs" />
+    <Compile Include="Model\UsuarioUnidadeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Metodos\UnidadesFiliaisMetodo.cs" />
   </ItemGroup>
