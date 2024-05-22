@@ -15,6 +15,7 @@ namespace WebsupplyHHemo.Interface.Metodos
     public class CondicaoPagtoMetodo
     {
         static int _intNumTransacao = 0;
+        static int _intNumServico = 0;
         private static int intNumTransacao
         {
             get
@@ -43,7 +44,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("For" + Mod_Gerais.RetornaIdentificador(), intNumTransacao, 6,
+                objLog = new Class_Log_Hhemo("For" + Mod_Gerais.RetornaIdentificador(), intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();

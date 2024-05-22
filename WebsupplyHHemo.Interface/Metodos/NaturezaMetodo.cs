@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebsupplyHHemo.Interface.Model;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
-    public class UnidadeMedidaMetodo
+    public class NaturezaMetodo
     {
         static int _intNumTransacao = 0;
         static int _intNumServico = 0;
+
         private static int intNumTransacao
         {
             get
@@ -30,20 +30,16 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<object> CadastraAtualiza(string CGC, string CC, string REQ)
+        public async Task<bool> CadastraAtualizaExclui()
         {
-            dynamic retorno = new
-            {
-                strMensagem = string.Empty,
-                status = false
-            };
-
+            string strMensagem = string.Empty;
+            bool retorno = false;
             Class_Log_Hhemo objLog;
 
             try
             {
                 // Cria a Model para receber os dados da API
-                UnidadeMedidaModel unidadeMedida = new UnidadeMedidaModel();
+                NaturezaModel natureza = new NaturezaModel();
 
                 // Cria o Cliente Http
                 HttpClient cliente = new HttpClient();
@@ -64,44 +60,38 @@ namespace WebsupplyHHemo.Interface.Metodos
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 // Trata o Retorno e aloca no objeto
-                unidadeMedida = JsonConvert.DeserializeObject<UnidadeMedidaModel>(responseBody);
+                natureza = JsonConvert.DeserializeObject<NaturezaModel>(responseBody);
 
                 // Realiza a Chamada do Banco
                 Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
 
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@iCOD_UNIDADE_TIPO", unidadeMedida.CodUnidade.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cDESCRICAO", unidadeMedida.Descricao == "" ? null : unidadeMedida.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cCGC", CGC, SqlDbType.VarChar, 15, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cCC", CC, SqlDbType.VarChar, 15, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cREQ", REQ, SqlDbType.VarChar, 15, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cAcao", unidadeMedida.CodUnidade == null ? "INC" : "ALT", SqlDbType.VarChar, 15, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@vCodigo", natureza.CodNatureza.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@vDescricao", natureza.Descricao == "" ? null : natureza.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@cStatus", natureza.Status == "" ? "N" : natureza.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
 
-                conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_EMPRESAS_INSUPD", arrParam), ref arrOut);
+                conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_Natureza_INSUPDEXC", arrParam), ref arrOut);
 
                 // Caso de certo a gravação no banco de dados, retorna true
-                retorno.status = true;
-
-                return retorno;
+                return true;
             }
             catch (Exception ex)
             {
                 // Estrutura o Erro
-                retorno.strMensagem = ex.Message;
-                retorno.status = false;
+                strMensagem = ex.Message;
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo("For" + Mod_Gerais.RetornaIdentificador(), intNumTransacao, 6,
-                                 1, -1, "", null, "Erro em " + Mod_Gerais.MethodName() + " :" + retorno.strMensagem,
+                                 1, -1, "", null, "Erro em " + Mod_Gerais.MethodName() + " :" + strMensagem,
                                  "", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
                 // Retorna Falso
-                return retorno;
+                return false;
             }
         }
     }

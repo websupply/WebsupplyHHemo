@@ -56,8 +56,12 @@
     <Compile Include="Metodos\CondicaoPagtoMetodo.cs" />
     <Compile Include="Metodos\FormaPagtoMetodo.cs" />
     <Compile Include="Metodos\Mod_Gerais.cs" />
+    <Compile Include="Metodos\NaturezaMetodo.cs" />
+    <Compile Include="Metodos\PlanoContaMetodo.cs" />
+    <Compile Include="Metodos\TipoOperacaoMetodo.cs" />
     <Compile Include="Metodos\UnidadeMedidaMetodo.cs" />
     <Compile Include="Metodos\UsuarioMetodo.cs" />
+    <Compile Include="Metodos\UsuarioUnidadeMetodo.cs" />
     <Compile Include="Model\CentroCustoModel.cs" />
     <Compile Include="Model\FormaPagtoModel.cs" />
     <Compile Include="Model\CondicaoPagtoModel.cs" />

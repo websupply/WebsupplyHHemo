@@ -65,7 +65,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@Codigo", usuario.CodUsuario.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@cCodigo", usuario.CodUsuario.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
                 arrParam.Add(new Parametro("@cNOMEREQUISIT", usuario.Nome == "" ? null : usuario.Nome.ToString(), SqlDbType.Char, 30, ParameterDirection.Input));
                 arrParam.Add(new Parametro("@cEMAIL", usuario.Email == "" ? null : usuario.Email.ToString(), SqlDbType.Char, 60, ParameterDirection.Input));
                 arrParam.Add(new Parametro("@cCompraContrato", usuario.Comprador == "" ? "N" : usuario.Comprador.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
