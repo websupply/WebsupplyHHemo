@@ -10,5 +10,6 @@ namespace WebsupplyHHemo.Interface.Model
     {
         public string CodUsuario { get; set; }
         public string CodUnidade { get; set; }
+        public string Status { get; set; }
     }
 }
