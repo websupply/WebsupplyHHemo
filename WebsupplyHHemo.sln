@@ -5,7 +5,9 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.Interface", "WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj", "{0FEDBD71-7E5D-4DCC-9171-39753FE9522D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.API", "WebsupplyHHemo.API\WebsupplyHHemo.API.csproj", "{D19E935F-3897-4073-8566-4FDC4FF533CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsupplyHHemo.API", "WebsupplyHHemo.API\WebsupplyHHemo.API.csproj", "{D19E935F-3897-4073-8566-4FDC4FF533CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.Teste", "WebsupplyHHemo.Teste\WebsupplyHHemo.Teste.csproj", "{749861F2-5064-4AC5-95EF-CAF7C93E7037}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D19E935F-3897-4073-8566-4FDC4FF533CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

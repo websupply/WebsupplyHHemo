@@ -20,7 +20,7 @@ namespace WebsupplyHHemo.Interface
 
             UnidadesFiliaisMetodo unidadesFiliais = new UnidadesFiliaisMetodo();
 
-            retorno = unidadesFiliais.CadastraAtualiza();
+            retorno = unidadesFiliais.CadastraAtualiza("26398136000195");
 
             strMensagem = retorno.strMensagem;
 

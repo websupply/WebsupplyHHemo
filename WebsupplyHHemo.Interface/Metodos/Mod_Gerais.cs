@@ -25,6 +25,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
         public static string ConnectionString()
         {
+            return "Data Source=SRVDEVSQL\\DESENV01,1434;Initial Catalog=WebSupply3;User ID=Websupply3;Password=Hands23on;";
             AssemblySettings settings = new AssemblySettings();
 #if DEBUG
             return settings["appConexaoHhemoDev"].ToString();
