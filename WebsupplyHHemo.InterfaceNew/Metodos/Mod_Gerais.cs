@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WSComuns;
 
-namespace WebsupplyHHemo.Interface.Metodos
+namespace WebsupplyHHemo.InterfaceNew.Metodos
 {
     public class Mod_Gerais
     {
