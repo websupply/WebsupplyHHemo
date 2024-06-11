@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebsupplyHHemo.InterfaceNew.Metodos
+namespace WebsupplyHHemo.InterfaceNew.Funcoes
 {
     public class Class_Servico
     {
@@ -29,7 +29,7 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
         {
             if (_strCodAmbiente == "")
             {
-                string strNomeMaquina = System.Environment.MachineName;
+                string strNomeMaquina = Environment.MachineName;
                 switch (strNomeMaquina.ToString().ToUpper())
                 {
                     case "SRVWEB1":

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WebsupplyHHemo.InterfaceNew.Funcoes;
 using WebsupplyHHemo.InterfaceNew.Model;
 
 namespace WebsupplyHHemo.InterfaceNew.Metodos
@@ -124,7 +125,7 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
                             UsuarioUnidadeModel usuarioUnidade = new UsuarioUnidadeModel
                             {
                                 CodUsuario = linhaRetorno["USR_ID"].ToString().Trim(),
-                                CodUnidade = linhaRetorno["USR_MSBLQL"].ToString().Trim(),
+                                CodUnidade = linhaRetorno["USR_FILIAL"].ToString().Trim(),
                                 Status = "N", /* Está fixo pois a API não retorna esta informação */
                             };
 

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using WebsupplyHHemo.InterfaceNew.Funcoes;
 using WebsupplyHHemo.InterfaceNew.Model;
 
 namespace WebsupplyHHemo.InterfaceNew.Metodos

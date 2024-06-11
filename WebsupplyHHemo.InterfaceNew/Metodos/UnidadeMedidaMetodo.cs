@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using WebsupplyHHemo.InterfaceNew.Funcoes;
 using WebsupplyHHemo.InterfaceNew.Model;
 
 namespace WebsupplyHHemo.InterfaceNew.Metodos
@@ -158,7 +159,7 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CADASTRA_UNIDADE_MEDIDA_EMPRESA", arrParam2), ref arrOut2);
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_Unidades_Tipos_Ins_UPD", arrParam2), ref arrOut2);
                                 }
 
                                 // Encerra a Conexão com Banco de Dados
