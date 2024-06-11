@@ -143,9 +143,9 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
                                     // Sincroniza o Retorno da API com a Classe de Gerenciamento
                                     UnidadeMedidaModel unidadeMedida = new UnidadeMedidaModel
                                     {
-                                        CodUnidade = DadosUnidade.Rows[i]["codigo"].ToString(),
-                                        Descricao = linhaRetorno["AH_DESCPO"].ToString(),
-                                        Sigla = linhaRetorno["AH_UNIMED"].ToString()
+                                        CodUnidade = DadosUnidade.Rows[i]["codigo"].ToString().Trim(),
+                                        Descricao = linhaRetorno["AH_DESCPO"].ToString().Trim(),
+                                        Sigla = linhaRetorno["AH_UNIMED"].ToString().Trim()
                                     };
 
                                     // Cria o Parametro da query do banco
@@ -158,7 +158,7 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    //conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CADASTRA_UNIDADE_MEDIDA_EMPRESA", arrParam2), ref arrOut2);
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CADASTRA_UNIDADE_MEDIDA_EMPRESA", arrParam2), ref arrOut2);
                                 }
 
                                 // Encerra a Conexão com Banco de Dados
