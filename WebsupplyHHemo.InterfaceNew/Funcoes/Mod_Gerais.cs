@@ -16,7 +16,7 @@ namespace WebsupplyHHemo.InterfaceNew.Funcoes
     {
         public static string strUsuario { get { return ""; } }
         public static string strSenha { get { return ""; } }
-        public static string strCGC { get { return "00864214000106"; } }
+        public static string strCGC { get { return "26398136000195"; } }
 
         public const string strErrorMessage = "O campo [{0}] deve conter entre {2} e {1} caracteres.";
         public const string strDateTimeMessage = "O campo [{0}] não é uma data válida.";
