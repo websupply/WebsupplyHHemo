@@ -40,5 +40,14 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine(usuarioUnidadeMetodo.CadastraAtualizaExclui().Result);
             Console.WriteLine(usuarioUnidadeMetodo.strMensagem);
         }
+
+        [TestMethod]
+        public void InterfaceUnidadesMedida()
+        {
+            UnidadeMedidaMetodo unidadeMedida = new UnidadeMedidaMetodo();
+
+            Console.WriteLine(unidadeMedida.CadastraAtualiza().Result);
+            Console.WriteLine(unidadeMedida.strMensagem);
+        }
     }
 }
