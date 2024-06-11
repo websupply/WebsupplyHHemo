@@ -22,5 +22,23 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine(naturezaMetodo.CadastraAtualizaExclui().Result);
             Console.WriteLine(naturezaMetodo.strMensagem);
         }
+
+        [TestMethod]
+        public void InterfaceUsuarios()
+        {
+            UsuarioMetodo usuarioMetodo = new UsuarioMetodo();
+
+            Console.WriteLine(usuarioMetodo.CadastraAtualiza("26398136000195", "HHEMO", "HHEMO").Result);
+            Console.WriteLine(usuarioMetodo.strMensagem);
+        }
+
+        [TestMethod]
+        public void InterfaceUsuariosUnidades()
+        {
+            UsuarioUnidadeMetodo usuarioUnidadeMetodo = new UsuarioUnidadeMetodo();
+
+            Console.WriteLine(usuarioUnidadeMetodo.CadastraAtualizaExclui().Result);
+            Console.WriteLine(usuarioUnidadeMetodo.strMensagem);
+        }
     }
 }
