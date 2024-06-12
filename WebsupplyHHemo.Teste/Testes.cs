@@ -49,5 +49,14 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine(unidadeMedida.CadastraAtualiza().Result);
             Console.WriteLine(unidadeMedida.strMensagem);
         }
+
+        [TestMethod]
+        public void InterfaceCondicaoPagto()
+        {
+            CondicaoPagtoMetodo condicaoPagto = new CondicaoPagtoMetodo();
+
+            Console.WriteLine(condicaoPagto.CadastraAtualiza().Result);
+            Console.WriteLine(condicaoPagto.strMensagem);
+        }
     }
 }

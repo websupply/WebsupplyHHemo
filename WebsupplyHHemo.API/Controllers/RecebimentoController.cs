@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebsupplyHHemo.API.Dto;
 
 namespace WebsupplyHHemo.API.Controllers
 {
@@ -15,7 +16,7 @@ namespace WebsupplyHHemo.API.Controllers
 
         [HttpPost]
         [Route("envia-recebimento")]
-        public Object EnviaRecebimento()
+        public Object EnviaRecebimento(RecebimentoRequestDto objRequest)
         {
             return new Object();
         }

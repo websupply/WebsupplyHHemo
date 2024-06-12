@@ -144,7 +144,6 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
                                     // Sincroniza o Retorno da API com a Classe de Gerenciamento
                                     UnidadeMedidaModel unidadeMedida = new UnidadeMedidaModel
                                     {
-                                        CodUnidade = DadosUnidade.Rows[i]["codigo"].ToString().Trim(),
                                         Descricao = linhaRetorno["AH_DESCPO"].ToString().Trim(),
                                         Sigla = linhaRetorno["AH_UNIMED"].ToString().Trim()
                                     };
@@ -153,7 +152,6 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
 
                                     ArrayList arrParam2 = new ArrayList();
 
-                                    arrParam2.Add(new Parametro("@vCodUnidade", unidadeMedida.CodUnidade.ToString(), SqlDbType.VarChar, 500, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@cUnidade", unidadeMedida.Sigla.ToString(), SqlDbType.Char, 4, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vDescrUnidade", unidadeMedida.Descricao == "" ? null : unidadeMedida.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
 
