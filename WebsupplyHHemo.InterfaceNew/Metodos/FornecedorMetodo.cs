@@ -158,6 +158,20 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
                     objLog.GravaLog();
                     objLog = null;
                 }
+                else
+                {
+                    // Define a mensagem de erro
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao CodFornecedor {intCodFornecedor}";
+
+                    // Gera Log
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                     0, 0, "", null, strMensagem,
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
+                    return false;
+                }
 
                 return true;
             }
@@ -189,7 +203,7 @@ namespace WebsupplyHHemo.InterfaceNew.Metodos
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("Cad" + strIdentificador, intNumTransacao, _intNumServico,
+                objLog = new Class_Log_Hhemo("Alt" + strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
