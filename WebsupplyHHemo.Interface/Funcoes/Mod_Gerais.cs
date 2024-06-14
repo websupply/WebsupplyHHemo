@@ -10,13 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WSComuns;
 
-namespace WebsupplyHHemo.Interface.Metodos
+namespace WebsupplyHHemo.Interface.Funcoes
 {
     public class Mod_Gerais
     {
         public static string strUsuario { get { return ""; } }
         public static string strSenha { get { return ""; } }
-        public static string strCGC { get { return "00864214000106"; } }
+        public static string strCGC { get { return "26398136000195"; } }
 
         public const string strErrorMessage = "O campo [{0}] deve conter entre {2} e {1} caracteres.";
         public const string strDateTimeMessage = "O campo [{0}] não é uma data válida.";
@@ -61,11 +61,11 @@ namespace WebsupplyHHemo.Interface.Metodos
         public static string TrataNullTiraEspaco(object objValor)
         {
             string objRecebe = string.Empty;
-            if (objValor != System.DBNull.Value)
+            if (objValor != DBNull.Value)
             {
                 try
                 {
-                    objRecebe = (string)objValor.ToString().Trim();
+                    objRecebe = objValor.ToString().Trim();
                 }
                 catch (Exception)
                 {
@@ -80,7 +80,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             try
             {
                 string strRetorno;
-                DateTime datDataAtual = System.DateTime.Now;
+                DateTime datDataAtual = DateTime.Now;
                 strRetorno = PreencheCampo(datDataAtual.Year.ToString(), 4) +
                              PreencheCampo(datDataAtual.Month.ToString(), 2) +
                              PreencheCampo(datDataAtual.Day.ToString(), 2) +
@@ -102,14 +102,14 @@ namespace WebsupplyHHemo.Interface.Metodos
             string strSOAP;
             MemoryStream MemStream;
             StreamWriter TextoWriter;
-            System.Text.StringBuilder StrBuilder;
+            StringBuilder StrBuilder;
             System.Xml.Serialization.XmlSerializer Serializer;
             StreamReader strReader;
             try
             {
                 MemStream = new MemoryStream();
-                TextoWriter = new StreamWriter(MemStream, System.Text.Encoding.UTF8);
-                StrBuilder = new System.Text.StringBuilder();
+                TextoWriter = new StreamWriter(MemStream, Encoding.UTF8);
+                StrBuilder = new StringBuilder();
                 Serializer = new System.Xml.Serialization.XmlSerializer(objSerializer.GetType());
                 Serializer.Serialize(TextoWriter, objSerializer);
                 MemStream.Position = 0;

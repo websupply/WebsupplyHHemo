@@ -8,7 +8,8 @@ namespace WebsupplyHHemo.Interface.Model
 {
     public class NaturezaModel
     {
-        public string CodNatureza { get; set;  }
+        public string CodNatureza { get; set; }
+        public string CodFilial { get; set; }
         public string Descricao { get; set; }
         public string Status { get; set; }
     }

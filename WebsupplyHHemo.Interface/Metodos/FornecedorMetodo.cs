@@ -8,10 +8,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebsupplyHHemo.InterfaceNew.Funcoes;
-using WebsupplyHHemo.InterfaceNew.Model;
+using WebsupplyHHemo.Interface.Funcoes;
+using WebsupplyHHemo.Interface.Model;
+using System.Net.Http;
 
-namespace WebsupplyHHemo.InterfaceNew.Metodos
+namespace WebsupplyHHemo.Interface.Metodos
 {
     public class FornecedorMetodo
     {

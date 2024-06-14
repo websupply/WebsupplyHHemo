@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WSComuns;
 
-namespace WebsupplyHHemo.Interface.Metodos
+namespace WebsupplyHHemo.Interface.Funcoes
 {
     public class Class_Log_Hhemo : Class_Log
     {
         #region Declaração dos Campos/Variáveis privados
 
-        private int _intCodEmpresa = 28;
+        private int _intCodEmpresa = 33;
         private string strIDTransacao { get; set; }
         private int intNumTransacao { get; set; }
         private int idServico { get; set; }
@@ -66,7 +66,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 _ArrParam.Add(new Parametro("@tConteudoSoap", strConteudoSoap == "" ? null : strConteudoSoap, SqlDbType.Text, 0, ParameterDirection.Input));
                 _ArrParam.Add(new Parametro("@vChaveLocal", strChaveLocal == "" ? null : strChaveLocal.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
                 _ArrParam.Add(new Parametro("@vChaveRemoto", strChaveRemoto == "" ? null : strChaveRemoto.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
-                _ArrParam.Add(new Parametro("@dDATA", System.DateTime.Now.ToString(), SqlDbType.DateTime, 8, ParameterDirection.Input));
+                _ArrParam.Add(new Parametro("@dDATA", DateTime.Now.ToString(), SqlDbType.DateTime, 8, ParameterDirection.Input));
                 _ArrParam.Add(new Parametro("@vIDTransacao", strIDTransacao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
                 _ArrParam.Add(new Parametro("@iNumTransacao", intNumTransacao.ToString(), SqlDbType.SmallInt, 2, ParameterDirection.Input));
                 _ArrParam.Add(new Parametro("@iSTATUS", intStatus.ToString(), SqlDbType.SmallInt, 2, ParameterDirection.Input));
@@ -78,7 +78,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 _ArrOut = new ArrayList();
                 _Conn.ExecuteStoredProcedure(new StoredProcedure("SP_GERAL_WEBSERVICE_LOG_INS", _ArrParam), ref _ArrOut);
 
-                int intIdLog = int.Parse(((SgiConnection.Parametro)(_ArrOut[0])).Valor.ToString());
+                int intIdLog = int.Parse(((Parametro)_ArrOut[0]).Valor.ToString());
 
                 if (arrDetalhe != null)
                 {
@@ -112,7 +112,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         }
     }
 
-    public class Class_Erro_Energisa
+    public class Class_Erro_HHemo
     {
         #region  Declaração dos Campos/Variáveis públicos
         public int intIDErro { get; set; }

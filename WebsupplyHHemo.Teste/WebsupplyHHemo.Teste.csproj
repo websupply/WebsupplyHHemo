@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebsupplyHHemo.InterfaceNew\WebsupplyHHemo.InterfaceNew.csproj" />
+    <ProjectReference Include="..\WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj" />
   </ItemGroup>
 
 </Project>

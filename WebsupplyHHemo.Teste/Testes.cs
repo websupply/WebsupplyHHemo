@@ -1,4 +1,4 @@
-using WebsupplyHHemo.InterfaceNew.Metodos;
+using WebsupplyHHemo.Interface.Metodos;
 
 namespace WebsupplyHHemo.Teste
 {
@@ -57,6 +57,19 @@ namespace WebsupplyHHemo.Teste
 
             Console.WriteLine(condicaoPagto.CadastraAtualiza().Result);
             Console.WriteLine(condicaoPagto.strMensagem);
+        }
+
+        [TestMethod]
+        public void InterfaceFornecedores()
+        {
+            FornecedorMetodo fornecedorMetodo = new FornecedorMetodo();
+
+            fornecedorMetodo.intCodForWebsupply = 1;
+
+            Console.WriteLine(fornecedorMetodo.Cadastra().Result);
+            Console.WriteLine(fornecedorMetodo.strMensagem);
+            Console.WriteLine(fornecedorMetodo.intCodForWebsupply);
+            Console.WriteLine(fornecedorMetodo.strCodForProtheus);
         }
     }
 }
