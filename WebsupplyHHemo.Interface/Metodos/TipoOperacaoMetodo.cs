@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SgiConnection;
 using System;
 using System.Collections;
@@ -16,7 +17,11 @@ namespace WebsupplyHHemo.Interface.Metodos
     public class TipoOperacaoMetodo
     {
         static int _intNumTransacao = 0;
-        static int _intNumServico = 0;
+        static int _intNumServico = 6;
+        string strIdentificador = "TipoOp" + Mod_Gerais.RetornaIdentificador();
+
+        public string strMensagem = string.Empty;
+
 
         private static int intNumTransacao
         {
@@ -31,52 +36,166 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<bool> CadastraAtualizaExclui()
+        public bool CarregaDados()
         {
-            string strMensagem = string.Empty;
             bool retorno = false;
             Class_Log_Hhemo objLog;
 
             try
             {
-                // Cria a Model para receber os dados da API
-                TipoOperacaoModel tipoOperacao = new TipoOperacaoModel();
-
                 // Cria o Cliente Http
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("For" + Mod_Gerais.RetornaIdentificador(), intNumTransacao, _intNumServico,
+                objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
-                // Define os Parametros e Cria a Chamada
-                string URI = "";
-                HttpResponseMessage response = await cliente.GetAsync(URI);
-                response.EnsureSuccessStatusCode();
-
-                // Recebe o retorno
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                // Trata o Retorno e aloca no objeto
-                tipoOperacao = JsonConvert.DeserializeObject<TipoOperacaoModel>(responseBody);
+                // Pega a URL do Serviço
+                Class_Servico objServico = new Class_Servico();
+                if (objServico.CarregaDados(_intNumServico, "", strIdentificador, intNumTransacao) == false)
+                {
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                                       1, -1, "", null, "Erro ao recuperar dados do serviço",
+                                                       "", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+                    strMensagem = "Erro ao recuperar dados do serviço";
+                    return false;
+                }
+                else
+                { _intNumTransacao -= 1; }
 
                 // Realiza a Chamada do Banco
                 Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
 
+                // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
-
-                arrParam.Add(new Parametro("@vCodigo", tipoOperacao.CodTipo.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@vDescricao", tipoOperacao.Descricao == "" ? null : tipoOperacao.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
-                arrParam.Add(new Parametro("@cStatus", tipoOperacao.Status == "" ? "N" : tipoOperacao.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
-
                 ArrayList arrOut = new ArrayList();
+                DataTable DadosUnidade = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CONSULTA_EMPRESAS_INTERFACE_SEL", arrParam), ref arrOut).Tables[0];
 
-                conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_TipoOperacao_INSUPDEXC", arrParam), ref arrOut);
+                // Encerra a Conexão com Banco de Dados
+                conn.Dispose();
 
-                // Caso de certo a gravação no banco de dados, retorna true
+                if (DadosUnidade.Rows.Count > 0)
+                {
+                    for (int i = 0; i < DadosUnidade.Rows.Count; i++)
+                    {
+                        // Parametros para Controle de Paginação
+                        int totalRegistros = 0;
+                        int linhaInicial = 0;
+                        int limiteRegistrosPagina = 100;
+                        int totalRegistrosPagina = 0;
+
+                        string strMensagemInterna = String.Empty;
+
+                        // Cria um laço para percorrer todas as linhas
+                        do
+                        {
+                            // Define a Estrutura da Request
+                            object requestBody = new
+                            {
+                                tokenid = "HH@2021!%",
+                                M0_CODIGO = "01",
+                                M0_CODFIL = DadosUnidade.Rows[i]["codigo"], // Incluir o CodFilial
+                                X5_CHAVE = "*",
+                                ROWINI = linhaInicial,
+                                ROWLINES = limiteRegistrosPagina
+                            };
+
+                            // Serializa o objeto para JSON
+                            string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
+
+                            // Adiciona o JSON como conteúdo da requisição
+                            var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
+
+                            // Define os parâmetros e cria a chamada
+                            var request = new HttpRequestMessage
+                            {
+                                Method = HttpMethod.Get,
+                                RequestUri = new Uri(objServico.strURL),
+                                Content = content
+                            };
+
+                            // Envia a requisição
+                            var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+                            response.EnsureSuccessStatusCode();
+
+                            var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                            // Trata o Retorno e aloca no objeto
+                            JArray retornoAPI = JArray.Parse(responseBody);
+
+                            // Verifica se tem retorno
+                            if (retornoAPI.Count > 0)
+                            {
+                                // Realiza a Chamada do Banco
+                                conn = new Conexao(Mod_Gerais.ConnectionString());
+
+                                // Percorre Todos os Resultados
+                                for (int j = 0; j < retornoAPI.Count; j++)
+                                {
+                                    // Pega a Linha do Retorno
+                                    JObject linhaRetorno = JObject.Parse(retornoAPI[j].ToString());
+
+                                    // Sincroniza o Retorno da API com a Classe de Gerenciamento
+                                    TipoOperacaoModel tipoOperacao = new TipoOperacaoModel
+                                    {
+                                        CodTipo = linhaRetorno["X5_CHAVE"].ToString().Trim(),
+                                        Descricao = linhaRetorno["X5_DESCRI"].ToString().Trim(),
+                                        Status = linhaRetorno["X5_MSBLQL"].ToString().Trim()
+                                    };
+
+                                    // Cria o Parametro da query do banco
+
+                                    ArrayList arrParam2 = new ArrayList();
+
+                                    arrParam2.Add(new Parametro("@vCodigo", tipoOperacao.CodTipo.ToString(), SqlDbType.Char, 10, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@vDescricao", tipoOperacao.Descricao == "" ? null : tipoOperacao.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@cStatus", tipoOperacao.Status == "" ? null : tipoOperacao.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
+
+                                    ArrayList arrOut2 = new ArrayList();
+
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_TipoOperacao_INSUPDEXC", arrParam), ref arrOut);
+                                }
+
+                                // Encerra a Conexão com Banco de Dados
+                                conn.Dispose();
+
+                                // Registra o Total de Registros da Pagina
+                                totalRegistrosPagina = retornoAPI.Count;
+
+                                // Seta o Total de Registros
+                                totalRegistros += totalRegistrosPagina;
+
+                                // Atualiza a Paginação
+                                linhaInicial = totalRegistros + 1;
+                            }
+                        } while (totalRegistrosPagina == limiteRegistrosPagina);
+
+                        // Retorna a Mensagem de Sucesso
+                        if (totalRegistros > 0)
+                        {
+                            strMensagemInterna = $"{totalRegistros} Tipo(s) de Operação cadastradas/atualizadas com sucesso para a Empresa {DadosUnidade.Rows[i]["descricao"]}";
+                            strMensagem += strMensagemInterna + "\n";
+                        }
+                        else
+                        {
+                            strMensagemInterna = $"Requisição concluída com sucesso sem dados retornados para a Empresa {DadosUnidade.Rows[i]["descricao"]}";
+                            strMensagem += strMensagemInterna + "\n";
+                        }
+
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", "", "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+                    }
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -85,9 +204,9 @@ namespace WebsupplyHHemo.Interface.Metodos
                 strMensagem = ex.Message;
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("For" + Mod_Gerais.RetornaIdentificador(), intNumTransacao, 6,
-                                 1, -1, "", null, "Erro em " + Mod_Gerais.MethodName() + " :" + strMensagem,
-                                 "", "", "", Mod_Gerais.MethodName());
+                objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                 1, -1, "", null, strMensagem,
+                                 "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 

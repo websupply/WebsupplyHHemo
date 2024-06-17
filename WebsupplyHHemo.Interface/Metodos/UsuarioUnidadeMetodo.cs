@@ -126,7 +126,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             {
                                 CodUsuario = linhaRetorno["USR_ID"].ToString().Trim(),
                                 CodUnidade = linhaRetorno["USR_FILIAL"].ToString().Trim(),
-                                Status = "N", /* Está fixo pois a API não retorna esta informação */
+                                Status = linhaRetorno["USR_MSBLQL"].ToString().Trim()
                             };
 
                             // Cria o Parametro da query do banco

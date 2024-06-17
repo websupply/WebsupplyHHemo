@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 using WebsupplyHHemo.Interface.Funcoes;
 using WebsupplyHHemo.Interface.Model;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
+    [ComVisible(true)]
     public class FornecedorMetodo
     {
         static int _intNumTransacao = 0;
@@ -39,10 +41,12 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<object> Cadastra()
+        public bool Cadastra()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
+
+            strIdentificador = "Cad" + strIdentificador;
 
             try
             {
@@ -50,7 +54,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("Cad" + strIdentificador, intNumTransacao, _intNumServico,
+                objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
@@ -136,33 +140,54 @@ namespace WebsupplyHHemo.Interface.Metodos
                     };
 
                     // Envia a requisição
-                    var response = await cliente.SendAsync(request).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
-
-                    var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    // Trata o Retorno e aloca no objeto
-                    JArray retornoAPI = JArray.Parse(responseBody);
-
-                    // Verifica se tem retorno
-                    if (retornoAPI.Count > 0)
+                    var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+                    if (response.IsSuccessStatusCode)
                     {
-                        // Precisa definir o que vai trazer de retorno
-                        // dependemos do Marcio Okada pra finalizar
-                        // este passo
+                        response.EnsureSuccessStatusCode();
 
-                        strCodForProtheus = "123456";
+                        var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                        // Trata o Retorno e aloca no objeto
+                        JArray retornoAPI = JArray.Parse(responseBody);
+
+                        // Verifica se tem retorno
+                        if (retornoAPI.Count > 0)
+                        {
+                            // Precisa definir o que vai trazer de retorno
+                            // dependemos do Marcio Okada pra finalizar
+                            // este passo
+
+                            strCodForProtheus = "123456";
+                        }
+
+                        // Define a mensagem de sucesso
+                        strMensagem = $"Fornecedor(a) {fornecedor.A2_NOME} do codigo [{strCodForProtheus}] cadastrado(a) com sucesso.";
+
+
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", "", "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+
+                        return true;
                     }
+                    else
+                    {
+                        // Define a mensagem de erro
+                        strMensagem = $"Ocorreu o erro [{response.StatusCode}] ao processar a solicitação, verifique nos logs e tente novamente.";
 
-                    // Define a mensagem de sucesso
-                    strMensagem = $"Fornecedor(a) {fornecedor.A2_NOME} cadastrado(a) com sucesso.";
 
-                    // Gera Log
-                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                     0, 0, "", null, strMensagem,
-                                     "L", "", "", Mod_Gerais.MethodName());
-                    objLog.GravaLog();
-                    objLog = null;
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", "", "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+
+                        return false;
+                    }
                 }
                 else
                 {
@@ -198,10 +223,12 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<object> Atualiza()
+        public bool Atualiza()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
+
+            strIdentificador = "Alt" + strIdentificador;
 
             try
             {
@@ -209,7 +236,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
-                objLog = new Class_Log_Hhemo("Alt" + strIdentificador, intNumTransacao, _intNumServico,
+                objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
@@ -295,24 +322,59 @@ namespace WebsupplyHHemo.Interface.Metodos
                     };
 
                     // Envia a requisição
-                    var response = await cliente.SendAsync(request).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
-
-                    var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    // Trata o Retorno e aloca no objeto
-                    JArray retornoAPI = JArray.Parse(responseBody);
-
-                    // Verifica se tem retorno
-                    if (retornoAPI.Count > 0)
+                    var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+                    if (response.IsSuccessStatusCode)
                     {
-                        // Precisa definir o que vai trazer de retorno
-                        // dependemos do Marcio Okada pra finalizar
-                        // este passo
-                    }
+                        response.EnsureSuccessStatusCode();
 
-                    // Define a mensagem de sucesso
-                    strMensagem = $"Fornecedor(a) {fornecedor.A2_NOME} Atualizado(a) com sucesso.";
+                        var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                        // Trata o Retorno e aloca no objeto
+                        JArray retornoAPI = JArray.Parse(responseBody);
+
+                        // Verifica se tem retorno
+                        if (retornoAPI.Count > 0)
+                        {
+                            // Precisa definir o que vai trazer de retorno
+                            // dependemos do Marcio Okada pra finalizar
+                            // este passo
+
+                            strCodForProtheus = "123456";
+                        }
+
+                        // Define a mensagem de sucesso
+                        strMensagem = $"Fornecedor(a) {fornecedor.A2_NOME} do codigo [{strCodForProtheus}] cadastrado(a) com sucesso.";
+
+
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", "", "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+
+                        return true;
+                    }
+                    else
+                    {
+                        // Define a mensagem de erro
+                        strMensagem = $"Ocorreu o erro [{response.StatusCode}] ao processar a solicitação, verifique nos logs e tente novamente.";
+
+
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", "", "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Define a mensagem de erro
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao CodFornecedor {intCodForWebsupply}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
@@ -320,6 +382,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
+
+                    return false;
                 }
 
                 return true;
