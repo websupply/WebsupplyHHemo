@@ -37,7 +37,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<object> CadastraAtualiza()
+        public bool CadastraAtualiza()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
@@ -121,10 +121,10 @@ namespace WebsupplyHHemo.Interface.Metodos
                             };
 
                             // Envia a requisição
-                            var response = await cliente.SendAsync(request).ConfigureAwait(false);
+                            var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
                             response.EnsureSuccessStatusCode();
 
-                            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
                             // Trata o Retorno e aloca no objeto
                             JArray retornoAPI = JArray.Parse(responseBody);

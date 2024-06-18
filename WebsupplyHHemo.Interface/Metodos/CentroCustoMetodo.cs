@@ -30,7 +30,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<bool> CadastraAtualiza(string CGCMatriz)
+        public bool CadastraAtualiza(string CGCMatriz)
         {
             string strMensagem = string.Empty;
             bool retorno = false;
@@ -53,11 +53,11 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Define os Parametros e Cria a Chamada
                 string URI = "";
-                HttpResponseMessage response = await cliente.GetAsync(URI);
+                HttpResponseMessage response = cliente.GetAsync(URI).GetAwaiter().GetResult();
                 response.EnsureSuccessStatusCode();
 
                 // Recebe o retorno
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 // Trata o Retorno e aloca no objeto
                 centroCusto = JsonConvert.DeserializeObject<CentroCustoModel>(responseBody);
