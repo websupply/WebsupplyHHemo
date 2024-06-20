@@ -10,8 +10,6 @@ namespace WebsupplyHHemo.Interface.Model
     {
         public string CentroCusto { get; set; }
         public string Descricao { get; set; }
-        public string Tipo { get; set; }
-        public string CentroDeCusto_Sup { get; set; }
         public string Status { get; set; }
     }
 }

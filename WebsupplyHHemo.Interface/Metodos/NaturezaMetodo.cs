@@ -36,7 +36,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public bool CadastraAtualizaExclui()
+        public bool ConsomeWS()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
@@ -121,9 +121,18 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             // Envia a requisição
                             var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
-                            response.EnsureSuccessStatusCode();
 
+                            // Trata o Retorno da API
                             var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                            // Gera Log com o retorno da API
+                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                             0, (int)response.StatusCode, "", null, responseBody,
+                                             "L", "", "", Mod_Gerais.MethodName());
+                            objLog.GravaLog();
+                            objLog = null;
+
+                            response.EnsureSuccessStatusCode();
 
                             // Trata o Retorno e aloca no objeto
                             JArray retornoAPI = JArray.Parse(responseBody);
@@ -143,10 +152,10 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     // Sincroniza o Retorno da API com a Classe de Gerenciamento
                                     NaturezaModel natureza = new NaturezaModel
                                     {
-                                        CodNatureza = linhaRetorno["ED_CODIGO"].ToString(),
-                                        CodFilial = linhaRetorno["M0_CODFIL"].ToString(),
-                                        Descricao = linhaRetorno["ED_DESCRIC"].ToString(),
-                                        Status = linhaRetorno["N_STATUS"].ToString() == "1" ? "N" : "S",
+                                        CodNatureza = linhaRetorno["ED_CODIGO"].ToString().Trim(),
+                                        CodFilial = linhaRetorno["M0_CODFIL"].ToString().Trim(),
+                                        Descricao = linhaRetorno["ED_DESCRIC"].ToString().Trim(),
+                                        Status = linhaRetorno["ED_MSBLQL"].ToString().Trim() == "1" ? "N" : "S",
                                     };
 
                                     // Cria o Parametro da query do banco
@@ -160,7 +169,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_Natureza_INSUPDEXC", arrParam2), ref arrOut2);
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_Natureza_INSUPDEXC", arrParam2), ref arrOut2);
                                 }
 
                                 // Encerra a Conexão com Banco de Dados

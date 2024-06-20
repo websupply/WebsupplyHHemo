@@ -10,7 +10,7 @@ namespace WebsupplyHHemo.Teste
         {
             UnidadesFiliaisMetodo unidadesFiliaisMetodo = new UnidadesFiliaisMetodo();
 
-            Console.WriteLine(unidadesFiliaisMetodo.CadastraAtualiza("26398136000195").Result);
+            Console.WriteLine(unidadesFiliaisMetodo.ConsomeWS());
             Console.WriteLine(unidadesFiliaisMetodo.strMensagem);
         }
 
@@ -19,7 +19,7 @@ namespace WebsupplyHHemo.Teste
         {
             NaturezaMetodo naturezaMetodo = new NaturezaMetodo();
 
-            Console.WriteLine(naturezaMetodo.CadastraAtualizaExclui().Result);
+            Console.WriteLine(naturezaMetodo.ConsomeWS());
             Console.WriteLine(naturezaMetodo.strMensagem);
         }
 
@@ -28,7 +28,7 @@ namespace WebsupplyHHemo.Teste
         {
             UsuarioMetodo usuarioMetodo = new UsuarioMetodo();
 
-            Console.WriteLine(usuarioMetodo.CadastraAtualiza("26398136000195", "HHEMO", "HHEMO").Result);
+            Console.WriteLine(usuarioMetodo.ConsomeWS());
             Console.WriteLine(usuarioMetodo.strMensagem);
         }
 
@@ -37,7 +37,7 @@ namespace WebsupplyHHemo.Teste
         {
             UsuarioUnidadeMetodo usuarioUnidadeMetodo = new UsuarioUnidadeMetodo();
 
-            Console.WriteLine(usuarioUnidadeMetodo.CadastraAtualizaExclui().Result);
+            Console.WriteLine(usuarioUnidadeMetodo.ConsomeWS());
             Console.WriteLine(usuarioUnidadeMetodo.strMensagem);
         }
 
@@ -46,7 +46,7 @@ namespace WebsupplyHHemo.Teste
         {
             UnidadeMedidaMetodo unidadeMedida = new UnidadeMedidaMetodo();
 
-            Console.WriteLine(unidadeMedida.CadastraAtualiza().Result);
+            Console.WriteLine(unidadeMedida.ConsomeWS());
             Console.WriteLine(unidadeMedida.strMensagem);
         }
 
@@ -55,8 +55,17 @@ namespace WebsupplyHHemo.Teste
         {
             CondicaoPagtoMetodo condicaoPagto = new CondicaoPagtoMetodo();
 
-            Console.WriteLine(condicaoPagto.CadastraAtualiza().Result);
+            Console.WriteLine(condicaoPagto.ConsomeWS());
             Console.WriteLine(condicaoPagto.strMensagem);
+        }
+
+        [TestMethod]
+        public void InterfaceCentroCusto()
+        {
+            CentroCustoMetodo centroCusto = new CentroCustoMetodo();
+
+            Console.WriteLine(centroCusto.ConsomeWS());
+            Console.WriteLine(centroCusto.strMensagem);
         }
 
         [TestMethod]
@@ -66,7 +75,7 @@ namespace WebsupplyHHemo.Teste
 
             fornecedorMetodo.intCodForWebsupply = 675193;
 
-            Console.WriteLine(fornecedorMetodo.Cadastra().Result);
+            Console.WriteLine(fornecedorMetodo.Cadastra());
             Console.WriteLine(fornecedorMetodo.strMensagem);
             Console.WriteLine(fornecedorMetodo.intCodForWebsupply);
             Console.WriteLine(fornecedorMetodo.strCodForProtheus);

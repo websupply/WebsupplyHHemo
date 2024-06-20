@@ -36,7 +36,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public bool CarregaDados()
+        public bool ConsomeWS()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
@@ -121,9 +121,18 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             // Envia a requisição
                             var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
-                            response.EnsureSuccessStatusCode();
 
+                            // Trata o Retorno da API
                             var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                            // Gera Log com o retorno da API
+                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                             0, (int)response.StatusCode, "", null, responseBody,
+                                             "L", "", "", Mod_Gerais.MethodName());
+                            objLog.GravaLog();
+                            objLog = null;
+
+                            response.EnsureSuccessStatusCode();
 
                             // Trata o Retorno e aloca no objeto
                             JArray retornoAPI = JArray.Parse(responseBody);
@@ -153,12 +162,13 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     ArrayList arrParam2 = new ArrayList();
 
                                     arrParam2.Add(new Parametro("@vCodigo", tipoOperacao.CodTipo.ToString(), SqlDbType.Char, 10, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@vCodFilial", DadosUnidade.Rows[i]["codigo"], SqlDbType.VarChar, 500, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vDescricao", tipoOperacao.Descricao == "" ? null : tipoOperacao.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@cStatus", tipoOperacao.Status == "" ? null : tipoOperacao.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_TipoOperacao_INSUPDEXC", arrParam), ref arrOut);
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_TipoOperacao_INSUPDEXC", arrParam), ref arrOut);
                                 }
 
                                 // Encerra a Conexão com Banco de Dados

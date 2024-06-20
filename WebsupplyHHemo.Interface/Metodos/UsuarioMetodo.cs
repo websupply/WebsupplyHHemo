@@ -37,7 +37,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public async Task<bool> CadastraAtualiza(string CGC, string CCusto, string Requisit)
+        public bool ConsomeWS()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
@@ -102,10 +102,19 @@ namespace WebsupplyHHemo.Interface.Metodos
                     };
 
                     // Envia a requisição
-                    var response = await cliente.SendAsync(request).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
+                    var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
 
-                    var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    // Trata o Retorno da API
+                    var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                    // Gera Log com o retorno da API
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                     0, (int)response.StatusCode, "", null, responseBody,
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
+                    response.EnsureSuccessStatusCode();
 
                     // Trata o Retorno e aloca no objeto
                     JArray retornoAPI = JArray.Parse(responseBody);
@@ -125,9 +134,9 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Sincroniza o Retorno da API com a Classe de Gerenciamento
                             UsuarioModel usuario = new UsuarioModel
                             {
-                                CGC = CGC,
-                                CCUSTO = CCusto,
-                                REQUISIT = Requisit,
+                                //CGC = CGC,
+                                //CCUSTO = CCusto,
+                                //REQUISIT = Requisit,
                                 CodUsuario = linhaRetorno["USR_ID"].ToString().Trim(),
                                 Nome = linhaRetorno["USR_NOME"].ToString().Trim(),
                                 Usuario = linhaRetorno["USR_CODIGO"].ToString().Trim(),

@@ -96,7 +96,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     {
                         tokenid = "HH@2021!%",
                         M0_CODIGO = "01",
-                        M0_CODFIL = DadosFornecedor.Rows[0]["M0_CODFIL"].ToString().Trim(),
+                        M0_CODFIL = "01010001", //DadosFornecedor.Rows[0]["M0_CODFIL"].ToString().Trim(),
                         UUID_WEBSUPPLY = DadosFornecedor.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
                         A2_XTPFOR1 = DadosFornecedor.Rows[0]["A2_XTPFOR1"].ToString().Trim(),
                         A2_COD = DadosFornecedor.Rows[0]["A2_COD"].ToString().Trim(),
@@ -141,11 +141,20 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                     // Envia a requisição
                     var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+
+                    // Trata o Retorno da API
+                    var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+                    // Gera Log com o retorno da API
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                     0, (int)response.StatusCode, "", null, responseBody,
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
                     if (response.IsSuccessStatusCode)
                     {
                         response.EnsureSuccessStatusCode();
-
-                        var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
                         // Trata o Retorno e aloca no objeto
                         JArray retornoAPI = JArray.Parse(responseBody);
