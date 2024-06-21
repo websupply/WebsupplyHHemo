@@ -49,7 +49,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
@@ -90,6 +90,13 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Serializa o objeto para JSON
                     string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
 
+                    // Gera Log
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                     0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
                     // Adiciona o JSON como conteúdo da requisição
                     var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
 
@@ -109,7 +116,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                     // Gera Log com o retorno da API
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                     0, (int)response.StatusCode, "", null, responseBody,
+                                     0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
@@ -123,7 +130,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     if (retornoAPI.Count > 0)
                     {
                         // Realiza a Chamada do Banco
-                        //Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
+                        Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
 
                         // Percorre Todos os Resultados
                         for (int i = 0; i < retornoAPI.Count; i++)
@@ -134,37 +141,44 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Sincroniza o Retorno da API com a Classe de Gerenciamento
                             UsuarioModel usuario = new UsuarioModel
                             {
-                                //CGC = CGC,
-                                //CCUSTO = CCusto,
-                                //REQUISIT = Requisit,
+                                Email = linhaRetorno["USR_EMAIL"].ToString().Trim(),
+                                NomeRequisitante = linhaRetorno["USR_NOME"].ToString().Trim(),
                                 CodUsuario = linhaRetorno["USR_ID"].ToString().Trim(),
-                                Nome = linhaRetorno["USR_NOME"].ToString().Trim(),
                                 Usuario = linhaRetorno["USR_CODIGO"].ToString().Trim(),
-                                Email = linhaRetorno["USR_EMAIL"].ToString().Trim()
+                                Status = linhaRetorno["USR_MSBLQL"].ToString().Trim()
                             };
 
-                            // Cria o Parametro da query do banco
-                            //Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
+                            // Verifica se o Código do usuário foi enviado
+                            // caso não, gera log de despejo 
+                            if (usuario.CodUsuario == "" || usuario.CodUsuario == null)
+                            {
+                                // Gera Log com o retorno da API
+                                objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                                 0, (int)response.StatusCode, usuario.ToString(), null, "Usuário não inserido por falta de chave primária (USR_ID)",
+                                                 "L", "", "", Mod_Gerais.MethodName());
+                                objLog.GravaLog();
+                                objLog = null;
+                            }
+                            else
+                            {
+                                // Cria o Parametro da query do banco
+                                ArrayList arrParam = new ArrayList();
 
-                            //ArrayList arrParam = new ArrayList();
+                                arrParam.Add(new Parametro("@vEmail", usuario.Email == "" ? null : usuario.Email.ToString(), SqlDbType.VarChar, 70, ParameterDirection.Input));
+                                arrParam.Add(new Parametro("@vNomeRequisitante", usuario.NomeRequisitante == "" ? null : usuario.NomeRequisitante.ToString(), SqlDbType.VarChar, 40, ParameterDirection.Input));
+                                arrParam.Add(new Parametro("@vCodigo", usuario.CodUsuario == "" ? null : usuario.CodUsuario.ToString(), SqlDbType.VarChar, 30, ParameterDirection.Input));
+                                arrParam.Add(new Parametro("@cUsuario", usuario.Usuario == "" ? null : usuario.Usuario.ToString(), SqlDbType.Char, 33, ParameterDirection.Input));
+                                arrParam.Add(new Parametro("@cStatus", usuario.Status == "" ? null : usuario.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
-                            //arrParam.Add(new Parametro("@cCodigo", usuario.CodUsuario.ToString(), SqlDbType.Int, 4, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cNOMEREQUISIT", usuario.Nome == "" ? null : usuario.Nome.ToString(), SqlDbType.Char, 30, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cEMAIL", usuario.Email == "" ? null : usuario.Email.ToString(), SqlDbType.Char, 60, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cCompraContrato", usuario.Comprador == "" ? "N" : usuario.Comprador.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cCotacao", usuario.Solicitante == "" ? "N" : usuario.Solicitante.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cINDEXCLUI", usuario.Status == "" ? "N" : usuario.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cCGC", CGC, SqlDbType.Char, 15, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cCCUSTO", CCusto, SqlDbType.Char, 15, ParameterDirection.Input));
-                            //arrParam.Add(new Parametro("@cREQUISIT", Requisit, SqlDbType.Char, 10, ParameterDirection.Input));
+                                ArrayList arrOut = new ArrayList();
 
-                            //ArrayList arrOut = new ArrayList();
+                                conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_USUARIO_INSUPDEXC", arrParam), ref arrOut);
+                            }
 
-                            //conn.ExecuteStoredProcedure(new StoredProcedure("SP_CENTROSCUSTO_INSUPD", arrParam), ref arrOut);
                         }
 
                         // Encerra a Conexão com Banco de Dados
-                        //conn.Dispose();
+                        conn.Dispose();
 
                         // Registra o Total de Registros da Pagina
                         totalRegistrosPagina = retornoAPI.Count;

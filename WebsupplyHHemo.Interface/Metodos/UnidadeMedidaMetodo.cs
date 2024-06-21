@@ -49,7 +49,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
@@ -109,6 +109,13 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Serializa o objeto para JSON
                             string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
 
+                            // Gera Log
+                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                             0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                             "L", "", "", Mod_Gerais.MethodName());
+                            objLog.GravaLog();
+                            objLog = null;
+
                             // Adiciona o JSON como conteúdo da requisição
                             var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
 
@@ -128,7 +135,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             // Gera Log com o retorno da API
                             objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                             0, (int)response.StatusCode, "", null, responseBody,
+                                             0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                              "L", "", "", Mod_Gerais.MethodName());
                             objLog.GravaLog();
                             objLog = null;

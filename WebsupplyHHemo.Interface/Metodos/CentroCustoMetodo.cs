@@ -21,6 +21,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         string strIdentificador = "CCusto" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
+        public string intCodFilial = string.Empty;
 
 
         private static int intNumTransacao
@@ -48,7 +49,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
@@ -73,7 +74,11 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
+
+                arrParam.Add(new Parametro("@cCodFilial", intCodFilial, SqlDbType.VarChar, 500, ParameterDirection.Input));
+
                 ArrayList arrOut = new ArrayList();
+
                 DataTable DadosUnidade = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CONSULTA_EMPRESAS_INTERFACE_SEL", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados
@@ -108,6 +113,13 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Serializa o objeto para JSON
                             string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
 
+                            // Gera Log
+                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                             0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                             "L", "", "", Mod_Gerais.MethodName());
+                            objLog.GravaLog();
+                            objLog = null;
+
                             // Adiciona o JSON como conteúdo da requisição
                             var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
 
@@ -127,7 +139,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             // Gera Log com o retorno da API
                             objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                             0, (int)response.StatusCode, "", null, responseBody,
+                                             0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                              "L", "", "", Mod_Gerais.MethodName());
                             objLog.GravaLog();
                             objLog = null;
@@ -161,7 +173,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                     ArrayList arrParam2 = new ArrayList();
 
-                                    arrParam2.Add(new Parametro("@cCGC", DadosUnidade.Rows[i]["cnpj"], SqlDbType.Char, 15, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@cCGC", DadosUnidade.Rows[i]["cgc"], SqlDbType.Char, 15, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vCodFilial", DadosUnidade.Rows[i]["codigo"], SqlDbType.VarChar, 500, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vCentroDeCusto", centroCusto.CentroCusto.ToString(), SqlDbType.VarChar, 20, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@cDescricao", centroCusto.Descricao == "" ? null : centroCusto.Descricao.ToString(), SqlDbType.VarChar, 60, ParameterDirection.Input));

@@ -51,6 +51,15 @@ namespace WebsupplyHHemo.Teste
         }
 
         [TestMethod]
+        public void InterfaceFormaPagto()
+        {
+            FormaPagtoMetodo formaPagto = new FormaPagtoMetodo();
+
+            Console.WriteLine(formaPagto.ConsomeWS());
+            Console.WriteLine(formaPagto.strMensagem);
+        }
+
+        [TestMethod]
         public void InterfaceCondicaoPagto()
         {
             CondicaoPagtoMetodo condicaoPagto = new CondicaoPagtoMetodo();
