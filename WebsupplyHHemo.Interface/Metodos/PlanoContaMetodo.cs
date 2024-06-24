@@ -14,7 +14,7 @@ using WebsupplyHHemo.Interface.Model;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
-    public class PlanoCustoMetodo
+    public class PlanoContaMetodo
     {
         static int _intNumTransacao = 0;
         static int _intNumServico = 3;
