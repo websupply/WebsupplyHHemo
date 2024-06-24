@@ -143,11 +143,11 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             arrParam.Add(new Parametro("@vCodUsuario", usuarioUnidade.CodUsuario == "" ? null : usuarioUnidade.CodUsuario.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@vCodUnidade", usuarioUnidade.CodUnidade == "" ? null : usuarioUnidade.CodUnidade.ToString(), SqlDbType.VarChar, 500, ParameterDirection.Input));
-                            arrParam.Add(new Parametro("@cStatus", usuarioUnidade.Status == "" ? "N" : usuarioUnidade.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@cStatus", usuarioUnidade.Status == "" ? null : usuarioUnidade.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
                             ArrayList arrOut = new ArrayList();
 
-                            conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_Unidades_Usuarios_INSUPDEXC", arrParam), ref arrOut);
+                            conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_Unidades_Usuarios_INSUPDEXC", arrParam), ref arrOut);
                         }
 
                         // Encerra a Conexão com Banco de Dados

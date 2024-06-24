@@ -16,7 +16,6 @@ namespace WebsupplyHHemo.Interface.Metodos
 {
     public class UsuarioMetodo
     {
-
         static int _intNumTransacao = 0;
         static int _intNumServico = 9;
         string strIdentificador = "Usr" + Mod_Gerais.RetornaIdentificador();

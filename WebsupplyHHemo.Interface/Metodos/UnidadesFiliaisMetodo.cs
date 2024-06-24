@@ -178,7 +178,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             ArrayList arrOut = new ArrayList();
 
-                            conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_EMPRESAS_INSUPD", arrParam), ref arrOut);
+                            conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_EMPRESAS_INSUPD", arrParam), ref arrOut);
                         }
 
                         // Encerra a Conexão com Banco de Dados
