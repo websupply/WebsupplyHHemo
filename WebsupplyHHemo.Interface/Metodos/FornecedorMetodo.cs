@@ -171,34 +171,31 @@ namespace WebsupplyHHemo.Interface.Metodos
                         // Verifica se tem retorno
                         if (retornoAPI.Count > 0)
                         {
-                            // Caso o Fornecedor não tenha código do protheus e loja, armazena essa informações
-                            // no banco
-                            if(fornecedor.A2_COD == String.Empty)
+                            // Percorre Todos os Resultados
+                            for (int i = 0; i < retornoAPI.Count; i++)
                             {
-                                // Realiza a Chamada do Banco
-                                conn = new Conexao(Mod_Gerais.ConnectionString());
+                                // Pega a Linha do Retorno
+                                JObject linhaRetorno = JObject.Parse(retornoAPI[i].ToString());
 
-                                // Percorre Todos os Resultados
-                                for (int i = 0; i < retornoAPI.Count; i++)
+                                // Sincroniza o Retorno da API com os Parametros
+                                strCodForProtheus = linhaRetorno["A2_COD"].ToString().Trim();
+                                strCodLojaProtheus = linhaRetorno["A2_LOJA"].ToString().Trim();
+
+                                // Valida se algum dos códigos retornou vázio
+                                // caso sim, devolve erro
+                                if (strCodForProtheus == String.Empty || strCodLojaProtheus == String.Empty)
                                 {
-                                    // Pega a Linha do Retorno
-                                    JObject linhaRetorno = JObject.Parse(retornoAPI[i].ToString());
+                                    strMensagem = $"Ocorreu um erro na chamada da aplicação - [{linhaRetorno["C_STATUS"].ToString().Trim()}] - A2_LOJA [{strCodLojaProtheus}] - A2_COD [{strCodLojaProtheus}]";
 
-                                    // Sincroniza o Retorno da API com os Parametros
-                                    strCodForProtheus = linhaRetorno["A2_COD"].ToString().Trim();
-                                    strCodLojaProtheus = linhaRetorno["A2_LOJA"].ToString().Trim();
+                                    return false;
+                                }
 
-                                    // Valida se algum dos códigos retornou vázio
-                                    // caso sim, devolve erro
-                                    if(strCodForProtheus == String.Empty || strCodLojaProtheus == String.Empty)
-                                    {
-                                        strMensagem = responseBody;
-
-                                        // Encerra a Conexão com Banco de Dados
-                                        conn.Dispose();
-
-                                        return false;
-                                    }
+                                // Caso o Fornecedor não tenha código do protheus e loja, armazena essa informações
+                                // no banco
+                                if (fornecedor.A2_COD == String.Empty)
+                                {
+                                    // Realiza a Chamada do Banco
+                                    conn = new Conexao(Mod_Gerais.ConnectionString());
 
                                     // Cria o Parametro da query do banco
                                     ArrayList arrParam2 = new ArrayList();
@@ -210,10 +207,10 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     ArrayList arrOut2 = new ArrayList();
 
                                     conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_FORNECEDORES_COD_FOR_UPD", arrParam2), ref arrOut2);
-                                }
 
-                                // Encerra a Conexão com Banco de Dados
-                                conn.Dispose();
+                                    // Encerra a Conexão com Banco de Dados
+                                    conn.Dispose();
+                                }
                             }
                         }
 
