@@ -11,11 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsupplyHHemo.InterfaceNew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.Interface", "WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj", "{01DD9813-521D-4C00-A8E8-DCEE2E1D4CD0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imagens", "Imagens", "{E3865E5C-22E7-49EB-894D-F41226A746E8}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\OneDrive\Documentos\topo.jpg = ..\..\..\OneDrive\Documentos\topo.jpg
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
