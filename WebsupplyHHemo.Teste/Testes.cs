@@ -37,9 +37,9 @@ namespace WebsupplyHHemo.Teste
         {
             FornecedorMetodo fornecedorMetodo = new FornecedorMetodo();
 
-            fornecedorMetodo.intCodForWebsupply = 675193;
+            fornecedorMetodo.intCodForWebsupply = 323757;
 
-            Console.WriteLine(fornecedorMetodo.Cadastra());
+            Console.WriteLine(fornecedorMetodo.ConsomeWS());
             Console.WriteLine(fornecedorMetodo.strMensagem);
             Console.WriteLine(fornecedorMetodo.intCodForWebsupply);
             Console.WriteLine(fornecedorMetodo.strCodForProtheus);

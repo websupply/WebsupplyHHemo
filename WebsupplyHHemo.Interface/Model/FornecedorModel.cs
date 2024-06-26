@@ -25,17 +25,17 @@ namespace WebsupplyHHemo.Interface.Model
         public string A2_EST { get; set; }
         public string A2_CEP { get; set; }
         public string A2_BAIRRO { get; set; }
-        public string A2_CODMUN { get; set; }
+        public string A2_COD_MUN { get; set; }
         public string A2_DDD { get; set; }
         public string A2_TEL { get; set; }
-        public string A2_FORMA { get; set; }
-        public string A2_TPCONTA { get; set; }
+        public string A2_FORMPAG { get; set; }
+        public string A2_TIPCTA { get; set; }
         public string A2_BANCO { get; set; }
         public string A2_AGENCIA { get; set; }
         public string A2_DVAGE { get; set; }
         public string A2_NUMCON { get; set; }
-        public string A2_DVCONTA { get; set; }
-        public string A2_PIX { get; set; }
+        public string A2_DVCTA { get; set; }
+        public string A2_XCGCDEP { get; set; }
         public string A2_MSBLQL { get; set; }
     }
 }
