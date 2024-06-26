@@ -24,23 +24,21 @@ Interface de Integração Hhemo
 
 ## Gateway Utilizado
 
-Descreva aqui o gateway utilizado no projeto. Exemplo:
-
-- **Gateway X**: Descrição do gateway e como ele é utilizado no projeto.
+- [TOTVS - Protheus](http://h118996.protheus.cloudtotvs.com.br:4050/rest/) - API Totvs - Protheus onde será feito todo o consumo e integração
 
 ## Como Usar
 
-Descreva aqui como utilizar o projeto, incluindo snippets de código em ASP.NET. Exemplo:
+Será necessário atualizar as dll's dentro do servidor em questão ou utilizar o projeto de Testes (Próximo Tópico).
 
 ### Instalação
 
 1. Clone o repositório:
     ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
+    git clone https://github.com/lgjhunzecher/WebsupplyHHemo.git
     ```
 2. Navegue até o diretório do projeto:
     ```bash
-    cd seu-repositorio
+    cd [repositório da solution]
     ```
 3. Restaure os pacotes NuGet:
     ```bash
@@ -49,19 +47,128 @@ Descreva aqui como utilizar o projeto, incluindo snippets de código em ASP.NET.
 
 ### Exemplo de Uso
 
-```csharp
-using System;
-using Newtonsoft.Json;
+```asp
+<!-- Fornecedor -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.FornecedorMetodo")
+    wsWebsupply.intCodForWebsupply = 0;
+    wsWebsupply.strCodForProtheus = string.Empty;
+    wsWebsupply.strCodLojaProtheus = string.Empty;
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
 
-namespace ExemploProjeto
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var objeto = new { Nome = "Exemplo", Valor = 123 };
-            string json = JsonConvert.SerializeObject(objeto);
-            Console.WriteLine(json);
-        }
-    }
-}
+<!-- Centros de Custo -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.CentroCustoMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Condição de Pagamento -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.CondicaoPagtoMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Forma de Pagamento -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.FormaPagtoMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Natureza -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.NaturezaMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Plano de Conta -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.PlanoContaMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Tipo de Operação -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.TipoOperacaoMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Unidade de Medida -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.UnidadeMedidaMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Usuários / Unidades -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.UnidadesFiliaisMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Usuários -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.UsuarioMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Usuários / Unidades -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.UsuarioUnidadeMetodo")
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
