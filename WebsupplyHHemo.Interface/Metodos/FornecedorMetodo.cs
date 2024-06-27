@@ -96,7 +96,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         tokenid = DadosFornecedor.Rows[0]["tokenid"].ToString().Trim(),
                         M0_CODIGO = DadosFornecedor.Rows[0]["M0_CODIGO"].ToString().Trim(),
                         M0_CODFIL = DadosFornecedor.Rows[0]["M0_CODFIL"].ToString().Trim(),
-                        UUID_WEBSUPPLY = DadosFornecedor.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
+                        UUID_WEB = DadosFornecedor.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
                         A2_XTPFOR1 = DadosFornecedor.Rows[0]["A2_XTPFOR1"].ToString().Trim(),
                         A2_COD = DadosFornecedor.Rows[0]["A2_COD"].ToString().Trim(),
                         A2_LOJA = DadosFornecedor.Rows[0]["A2_LOJA"].ToString().Trim(),
@@ -176,6 +176,28 @@ namespace WebsupplyHHemo.Interface.Metodos
                             {
                                 // Pega a Linha do Retorno
                                 JObject linhaRetorno = JObject.Parse(retornoAPI[i].ToString());
+
+                                // Instância a model de controle do retorno da API
+                                RetornoAPIModel retornoAPIModel = new RetornoAPIModel {
+                                    C_STATUS = linhaRetorno["C_STATUS"].ToString().Trim(),
+                                    N_STATUS = (int)linhaRetorno["N_STATUS"]
+                                };
+
+                                // Verifica se retornou erro do protheus
+                                // N_STATUS": 1 = Sucesso / 0 = Erro
+                                if (retornoAPIModel.N_STATUS != 1)
+                                {
+                                    strMensagem = retornoAPIModel.C_STATUS;
+
+                                    // Gera Log com o retorno da API
+                                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                                     0, (int)response.StatusCode, retornoAPIModel, null, "Erro no Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                                     "L", intCodForWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                    objLog.GravaLog();
+                                    objLog = null;
+
+                                    return false;
+                                }
 
                                 // Sincroniza o Retorno da API com os Parametros
                                 strCodForProtheus = linhaRetorno["A2_COD"].ToString().Trim();

@@ -74,6 +74,7 @@
     <Compile Include="Model\NaturezaModel.cs" />
     <Compile Include="Model\PedidoCompraModel.cs" />
     <Compile Include="Model\PlanoContaModel.cs" />
+    <Compile Include="Model\RetornoAPIModel.cs" />
     <Compile Include="Model\TipoOperacaoModel.cs" />
     <Compile Include="Model\UnidadeMedidaModel.cs" />
     <Compile Include="Model\UnidadeModel.cs" />

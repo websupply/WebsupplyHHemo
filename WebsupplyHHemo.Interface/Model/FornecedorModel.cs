@@ -11,7 +11,7 @@ namespace WebsupplyHHemo.Interface.Model
         public string tokenid { get; set; } = "HH@2021!%";
         public string M0_CODIGO { get; set; } = "01";
         public string M0_CODFIL { get; set; }
-        public string UUID_WEBSUPPLY { get; set; }
+        public string UUID_WEB { get; set; }
         public string A2_XTPFOR1 { get; set; }
         public string A2_COD { get; set; }
         public string A2_LOJA { get; set; }
