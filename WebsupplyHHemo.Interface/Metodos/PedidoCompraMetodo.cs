@@ -8,6 +8,7 @@ using System.Text;
 using WebsupplyHHemo.Interface.Funcoes;
 using WebsupplyHHemo.Interface.Model;
 using System.Net.Http;
+using System.Collections.Generic;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
@@ -78,52 +79,104 @@ namespace WebsupplyHHemo.Interface.Metodos
                 arrParam.Add(new Parametro("@iCL_CDG", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
-                DataTable DadosFornecedor = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_FORNECEDORES_API_SEL", arrParam), ref arrOut).Tables[0];
+                DataTable DadosPedidoCompra = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar pedido]", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados
                 conn.Dispose();
 
-                if (DadosFornecedor.Rows.Count > 0)
+                if (DadosPedidoCompra.Rows.Count > 0)
                 {
                     // Estrutura a Model
-                    FornecedorModel fornecedor = new FornecedorModel
+                    PedidoCompraModel pedidoCompra = new PedidoCompraModel
                     {
-                        tokenid = DadosFornecedor.Rows[0]["tokenid"].ToString().Trim(),
-                        M0_CODIGO = DadosFornecedor.Rows[0]["M0_CODIGO"].ToString().Trim(),
-                        M0_CODFIL = DadosFornecedor.Rows[0]["M0_CODFIL"].ToString().Trim(),
-                        UUID_WEB = DadosFornecedor.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
-                        A2_XTPFOR1 = DadosFornecedor.Rows[0]["A2_XTPFOR1"].ToString().Trim(),
-                        A2_COD = DadosFornecedor.Rows[0]["A2_COD"].ToString().Trim(),
-                        A2_LOJA = DadosFornecedor.Rows[0]["A2_LOJA"].ToString().Trim(),
-                        A2_TIPO = DadosFornecedor.Rows[0]["A2_TIPO"].ToString().Trim(),
-                        A2_NOME = DadosFornecedor.Rows[0]["A2_NOME"].ToString().Trim(),
-                        A2_NREDUZ = DadosFornecedor.Rows[0]["A2_NREDUZ"].ToString().Trim(),
-                        A2_CGC = DadosFornecedor.Rows[0]["A2_CGC"].ToString().Trim(),
-                        A2_INSCR = DadosFornecedor.Rows[0]["A2_INSCR"].ToString().Trim(),
-                        A2_END = DadosFornecedor.Rows[0]["A2_END"].ToString().Trim(),
-                        A2_MUN = DadosFornecedor.Rows[0]["A2_MUN"].ToString().Trim(),
-                        A2_EST = DadosFornecedor.Rows[0]["A2_EST"].ToString().Trim(),
-                        A2_CEP = DadosFornecedor.Rows[0]["A2_CEP"].ToString().Trim(),
-                        A2_BAIRRO = DadosFornecedor.Rows[0]["A2_BAIRRO"].ToString().Trim(),
-                        A2_COD_MUN = DadosFornecedor.Rows[0]["A2_COD_MUN"].ToString().Trim(),
-                        A2_DDD = DadosFornecedor.Rows[0]["A2_DDD"].ToString().Trim(),
-                        A2_TEL = DadosFornecedor.Rows[0]["A2_TEL"].ToString().Trim(),
-                        A2_FORMPAG = DadosFornecedor.Rows[0]["A2_FORMPAG"].ToString().Trim(),
-                        A2_TIPCTA = DadosFornecedor.Rows[0]["A2_TIPCTA"].ToString().Trim(),
-                        A2_BANCO = DadosFornecedor.Rows[0]["A2_BANCO"].ToString().Trim(),
-                        A2_AGENCIA = DadosFornecedor.Rows[0]["A2_AGENCIA"].ToString().Trim(),
-                        A2_DVAGE = DadosFornecedor.Rows[0]["A2_DVAGE"].ToString().Trim(),
-                        A2_NUMCON = DadosFornecedor.Rows[0]["A2_NUMCON"].ToString().Trim(),
-                        A2_DVCTA = DadosFornecedor.Rows[0]["A2_DVCTA"].ToString().Trim(),
-                        A2_XCGCDEP = DadosFornecedor.Rows[0]["A2_XCGCDEP"].ToString().Trim(),
-                        A2_MSBLQL = DadosFornecedor.Rows[0]["A2_MSBLQL"].ToString().Trim()
+                        tokenid = DadosPedidoCompra.Rows[0]["tokenid"].ToString().Trim(),
+                        M0_CODFIL = DadosPedidoCompra.Rows[0]["M0_CODFIL"].ToString().Trim(),
+                        M0_CODIGO = DadosPedidoCompra.Rows[0]["M0_CODIGO"].ToString().Trim(),
+                        C7_COND = DadosPedidoCompra.Rows[0]["C7_COND"].ToString().Trim(),
+                        C7_DESPESA_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_DESPESA_TOTAL"],
+                        C7_EMISSAO = DadosPedidoCompra.Rows[0]["C7_EMISSAO"].ToString().Trim(),
+                        C7_FILENT = DadosPedidoCompra.Rows[0]["C7_FILENT"].ToString().Trim(),
+                        C7_FORNECE = DadosPedidoCompra.Rows[0]["C7_FORNECE"].ToString().Trim(),
+                        C7_LOJA = DadosPedidoCompra.Rows[0]["C7_LOJA"].ToString().Trim(),
+                        C7_NUM = DadosPedidoCompra.Rows[0]["C7_NUM"].ToString().Trim(),
+                        UUID_WEBSUPPLY = DadosPedidoCompra.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
+                        C7_SEGURO_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_SEGURO_TOTAL"],
+                        C7_VALFRE_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VALFRE_TOTAL"],
+                        C7_VLDESC_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VLDESC_TOTAL"],
+                        C7_MSBLQL = DadosPedidoCompra.Rows[0]["A2_MSBLQL"].ToString().Trim()
                     };
 
+                    // Estrutura a Model de Itens
+                    List<PedidoCompraModel.Item> itensPedidoCompra = new List<PedidoCompraModel.Item>();
+
+                    // Realiza a Chamada do Banco
+                    conn = new Conexao(Mod_Gerais.ConnectionString());
+
+                    // Cria o Parametro da query do banco
+                    arrParam = new ArrayList();
+
+                    arrParam.Add(new Parametro("@iCL_CDG", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+
+                    arrOut = new ArrayList();
+                    DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar itens do pedido]", arrParam), ref arrOut).Tables[0];
+
+                    // Encerra a Conexão com Banco de Dados
+                    conn.Dispose();
+
+                    // Verifica se Existe itens para o pedido e caso sim, traz
+                    // os itens e caso não, retorna erro
+                    if (DadosItens.Rows.Count > 0)
+                    {
+                        for(int i = 0; i < DadosItens.Rows.Count; i++)
+                        {
+                            // Pega a Linha do Registro
+                            var registro = DadosItens.Rows[i];
+
+                            // Carrega os Dados do item
+                            PedidoCompraModel.Item item = new PedidoCompraModel.Item
+                            {
+                                C7_CC = registro["C7_CC"].ToString().Trim(),
+                                C7_CONTA = registro["C7_CONTA"].ToString().Trim(),
+                                C7_DATPRF = registro["C7_DATPRF"].ToString().Trim(),
+                                C7_DESPESA = (decimal)registro["C7_DESPESA"],
+                                C7_ITEM = registro["C7_ITEM"].ToString().Trim(),
+                                C7_OBS = registro["C7_OBS"].ToString().Trim(),
+                                C7_PRECO = (decimal)registro["C7_PRECO"],
+                                C7_PRODUTO = registro["C7_PRODUTO"].ToString().Trim(),
+                                C7_QUANT = (int)registro["C7_QUANT"],
+                                C7_SEGURO = (decimal)registro["C7_SEGURO"],
+                                C7_TOTAL = (decimal)registro["C7_TOTAL"],
+                                C7_VALFRE = (decimal)registro["C7_VALFRE"],
+                                C7_VALICM = (decimal)registro["C7_VALICM"],
+                                C7_VALIPI = (decimal)registro["C7_VALIPI"],
+                                C7_VLDESC = (decimal)registro["C7_VLDESC"],
+                                C7_MSBLQL = registro["C7_MSBLQL"].ToString().Trim(),
+                            };
+
+                            // Adiciona a Array de Itens
+                            itensPedidoCompra.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        // Define a mensagem de erro
+                        strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum item associado ao Pedido Nº {intCodPedComWebsupply}";
+
+                        // Gera Log
+                        objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                         0, 0, "", null, strMensagem,
+                                         "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                        objLog.GravaLog();
+                        objLog = null;
+
+                        return false;
+                    }
+
                     // Serializa o objeto para JSON
-                    string jsonRequestBody = JsonConvert.SerializeObject(fornecedor);
+                    string jsonRequestBody = JsonConvert.SerializeObject(pedidoCompra);
 
                     // Atualiza o Identificador
-                    strIdentificador = (fornecedor.A2_COD != String.Empty ? "Alt" : "Cad") + strIdentificador;
+                    strIdentificador = (pedidoCompra.C7_NUM != String.Empty ? "Alt" : "Cad") + strIdentificador;
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
@@ -138,7 +191,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Define os parâmetros e cria a chamada
                     var request = new HttpRequestMessage
                     {
-                        Method = fornecedor.A2_COD != String.Empty ? HttpMethod.Put : HttpMethod.Post,
+                        Method = pedidoCompra.C7_NUM != String.Empty ? HttpMethod.Put : HttpMethod.Post,
                         RequestUri = new Uri(objServico.strURL),
                         Content = content
                     };
@@ -196,8 +249,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 }
 
                                 // Sincroniza o Retorno da API com os Parametros
-                                strCodPedComProtheus = linhaRetorno["A2_COD"].ToString().Trim();
-                                strCodLojaProtheus = linhaRetorno["A2_LOJA"].ToString().Trim();
+                                strCodPedComProtheus = linhaRetorno["C7_COD"].ToString().Trim();
+                                strCodLojaProtheus = linhaRetorno["C7_LOJA"].ToString().Trim();
 
                                 // Valida se algum dos códigos retornou vázio
                                 // caso sim, devolve erro
@@ -210,7 +263,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                 // Caso o Fornecedor não tenha código do protheus e loja, armazena essa informações
                                 // no banco
-                                if (fornecedor.A2_COD == String.Empty)
+                                if (pedidoCompra.C7_NUM == String.Empty)
                                 {
                                     // Realiza a Chamada do Banco
                                     conn = new Conexao(Mod_Gerais.ConnectionString());
@@ -224,7 +277,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_FORNECEDORES_COD_FOR_UPD", arrParam2), ref arrOut2);
+                                    conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para gravar o codigo do totvs no pedido]", arrParam2), ref arrOut2);
 
                                     // Encerra a Conexão com Banco de Dados
                                     conn.Dispose();
@@ -233,7 +286,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         }
 
                         // Define a mensagem de sucesso
-                        strMensagem = $"Fornecedor(a) {fornecedor.A2_NOME} do codigo [{(strCodPedComProtheus != String.Empty ? strCodPedComProtheus : fornecedor.A2_COD)}] da loja [{(strCodLojaProtheus != String.Empty ? strCodLojaProtheus : fornecedor.A2_LOJA)}] {(fornecedor.A2_COD != String.Empty ? "atualizado(a)" : "cadastrado(a)")} com sucesso.";
+                        strMensagem = $"Pedido Nº {intCodPedComWebsupply} do codigo [{(strCodPedComProtheus != String.Empty ? strCodPedComProtheus : pedidoCompra.C7_NUM)}] da loja [{(strCodLojaProtheus != String.Empty ? strCodLojaProtheus : pedidoCompra.C7_LOJA)}] {(pedidoCompra.C7_NUM != String.Empty ? "atualizado(a)" : "cadastrado(a)")} com sucesso.";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
@@ -263,7 +316,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 else
                 {
                     // Define a mensagem de erro
-                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao CodFornecedor {intCodPedComWebsupply}";
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Pedido Nº {intCodPedComWebsupply}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
