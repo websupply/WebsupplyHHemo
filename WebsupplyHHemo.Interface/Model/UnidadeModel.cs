@@ -9,7 +9,9 @@ namespace WebsupplyHHemo.Interface.Model
     public class UnidadeModel
     {
         public string CodUnidade { get; set; }
-        public string NomeCompleto { get; set; }
+        public string RazSoc { get; set; }
+        public string Descricao { get; set; }
+        public string GrupoEconomico { get; set; }
         public string CGC { get; set; }
         public string CNPJ { get; set; }
         public string IE { get; set; }

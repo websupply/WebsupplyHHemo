@@ -12,17 +12,18 @@ using System.Collections.Generic;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
-    public class PedidoCompraMetodo
+    public class RecebimentoMetodo
     {
         static int _intNumTransacao = 0;
-        static int _intNumServico = 12;
-        string strIdentificador = "PedCom" + Mod_Gerais.RetornaIdentificador();
+        static int _intNumServico = 13;
+        string strIdentificador = "Rec" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
 
         // Paramêtros de Controle da Classe
-        public int intCodPedComWebsupply = 0;
-        public string strCodPedComProtheus = string.Empty;
+        public int intCodRecComWebsupply = 0;
+        public string strCodLojaProtheus = string.Empty;
+        public string strFuncao = string.Empty; // Enviar - Cancelar
 
         private static int intNumTransacao
         {
@@ -44,13 +45,30 @@ namespace WebsupplyHHemo.Interface.Metodos
 
             try
             {
+                // Verifica se a Funcao enviada está dentro do esperado
+                if(strFuncao.ToString().Trim() != "Enviar" && strFuncao.ToString().Trim() != "Cancelar")
+                {
+
+                    // Define a mensagem de erro
+                    strMensagem = $"Função não permitida ou não parametrizada, verifique e tente novamente. Função Solicitada [{strFuncao}]";
+
+                    // Gera Log
+                    objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
+                                     0, 0, "", null, strMensagem,
+                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
+                    return false;
+                }
+
                 // Cria o Cliente Http
                 HttpClient cliente = new HttpClient();
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
-                                 "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                 "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
@@ -60,7 +78,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 {
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                                        1, -1, "", null, "Erro ao recuperar dados do serviço",
-                                                       "", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                                       "", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
                     strMensagem = "Erro ao recuperar dados do serviço";
@@ -75,34 +93,35 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@iCdgPed", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
-                DataTable DadosPedidoCompra = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Pedido_Compras_Sel", arrParam), ref arrOut).Tables[0];
+                DataTable DadosRecebimento = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar recebimento]", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados
                 conn.Dispose();
 
-                if (DadosPedidoCompra.Rows.Count > 0)
+                if (DadosRecebimento.Rows.Count > 0)
                 {
                     // Estrutura a Model
-                    PedidoCompraModel pedidoCompra = new PedidoCompraModel
+                    RecebimentoModel recebimento = new RecebimentoModel
                     {
-                        tokenid = DadosPedidoCompra.Rows[0]["tokenid"].ToString().Trim(),
-                        M0_CODFIL = DadosPedidoCompra.Rows[0]["M0_CODFIL"].ToString().Trim(),
-                        M0_CODIGO = DadosPedidoCompra.Rows[0]["M0_CODIGO"].ToString().Trim(),
-                        C7_COND = DadosPedidoCompra.Rows[0]["C7_COND"].ToString().Trim(),
-                        C7_DESPESA_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_DESPESA_TOTAL"],
-                        C7_EMISSAO = DadosPedidoCompra.Rows[0]["C7_EMISSAO"].ToString().Trim(),
-                        C7_FILENT = DadosPedidoCompra.Rows[0]["C7_FILENT"].ToString().Trim(),
-                        C7_FORNECE = DadosPedidoCompra.Rows[0]["C7_FORNECE"].ToString().Trim(),
-                        C7_LOJA = DadosPedidoCompra.Rows[0]["C7_LOJA"].ToString().Trim(),
-                        C7_NUM = DadosPedidoCompra.Rows[0]["C7_NUM"].ToString().Trim(),
-                        UUID_WEBSUPPLY = DadosPedidoCompra.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
-                        C7_SEGURO_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_SEGURO_TOTAL"],
-                        C7_VALFRE_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VALFRE_TOTAL"],
-                        C7_VLDESC_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VLDESC_TOTAL"],
-                        C7_MSBLQL = DadosPedidoCompra.Rows[0]["A2_MSBLQL"].ToString().Trim()
+                        tokenid = DadosRecebimento.Rows[0]["tokenid"].ToString().Trim(),
+                        M0_CODFIL = DadosRecebimento.Rows[0]["M0_CODFIL"].ToString().Trim(),
+                        M0_CODIGO = DadosRecebimento.Rows[0]["M0_CODIGO"].ToString().Trim(),
+                        F1_CHVNFE = DadosRecebimento.Rows[0]["F1_CHVNFE"].ToString().Trim(),
+                        F1_COND = DadosRecebimento.Rows[0]["F1_COND"].ToString().Trim(),
+                        F1_DOC = DadosRecebimento.Rows[0]["F1_DOC"].ToString().Trim(),
+                        F1_DTDIGIT = DadosRecebimento.Rows[0]["F1_DTDIGIT"].ToString().Trim(),
+                        F1_EMISSAO = DadosRecebimento.Rows[0]["F1_EMISSAO"].ToString().Trim(),
+                        F1_ESPECIE = DadosRecebimento.Rows[0]["F1_ESPECIE"].ToString().Trim(),
+                        F1_FORMUL = DadosRecebimento.Rows[0]["F1_FORMUL"].ToString().Trim(),
+                        F1_FORNECE = DadosRecebimento.Rows[0]["F1_FORNECE"].ToString().Trim(),
+                        F1_LOJA = DadosRecebimento.Rows[0]["F1_LOJA"].ToString().Trim(),
+                        F1_SERIE = DadosRecebimento.Rows[0]["F1_SERIE"].ToString().Trim(),
+                        F1_TIPO = DadosRecebimento.Rows[0]["F1_TIPO"].ToString().Trim(),
+                        F1_XML = DadosRecebimento.Rows[0]["F1_XML"].ToString().Trim(),
+                        UUID_WEBSUPPLY = DadosRecebimento.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
                     };
 
                     // Realiza a Chamada do Banco
@@ -111,10 +130,10 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Cria o Parametro da query do banco
                     arrParam = new ArrayList();
 
-                    arrParam.Add(new Parametro("@iCdgPed", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
-                    DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Pedido_Compras_Itens_Sel", arrParam), ref arrOut).Tables[0];
+                    DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar itens do pedido]", arrParam), ref arrOut).Tables[0];
 
                     // Encerra a Conexão com Banco de Dados
                     conn.Dispose();
@@ -123,45 +142,50 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // os itens e caso não, retorna erro
                     if (DadosItens.Rows.Count > 0)
                     {
-                        for(int i = 0; i < DadosItens.Rows.Count; i++)
+                        for (int i = 0; i < DadosItens.Rows.Count; i++)
                         {
                             // Pega a Linha do Registro
                             var registro = DadosItens.Rows[i];
 
                             // Carrega os Dados do item
-                            PedidoCompraModel.Item item = new PedidoCompraModel.Item
+                            RecebimentoModel.Item item = new RecebimentoModel.Item
                             {
-                                C7_CC = registro["C7_CC"].ToString().Trim(),
-                                C7_CONTA = registro["C7_CONTA"].ToString().Trim(),
-                                C7_DATPRF = registro["C7_DATPRF"].ToString().Trim(),
-                                C7_DESPESA = (decimal)registro["C7_DESPESA"],
-                                C7_ITEM = registro["C7_ITEM"].ToString().Trim(),
-                                C7_OBS = registro["C7_OBS"].ToString().Trim(),
-                                C7_PRECO = (decimal)registro["C7_PRECO"],
-                                C7_PRODUTO = registro["C7_PRODUTO"].ToString().Trim(),
-                                C7_QUANT = (int)registro["C7_QUANT"],
-                                C7_SEGURO = (decimal)registro["C7_SEGURO"],
-                                C7_TOTAL = (decimal)registro["C7_TOTAL"],
-                                C7_VALFRE = (decimal)registro["C7_VALFRE"],
-                                C7_VALICM = (decimal)registro["C7_VALICM"],
-                                C7_VALIPI = (decimal)registro["C7_VALIPI"],
-                                C7_VLDESC = (decimal)registro["C7_VLDESC"],
-                                C7_MSBLQL = registro["C7_MSBLQL"].ToString().Trim(),
+                                D1_CC = registro["D1_CC"].ToString().Trim(),
+                                D1_CONTA = registro["D1_CONTA"].ToString().Trim(),
+                                D1_DATPRF = registro["D1_DATPRF"].ToString().Trim(),
+                                D1_DESPESA = (decimal)registro["D1_DESPESA"],
+                                D1_ITEM = registro["D1_ITEM"].ToString().Trim(),
+                                D1_ITEMPC = registro["D1_ITEMPC"].ToString().Trim(),
+                                D1_OBS = registro["D1_OBS"].ToString().Trim(),
+                                D1_PRECO = (decimal)registro["D1_PRECO"],
+                                D1_COD = registro["D1_COD"].ToString().Trim(),
+                                D1_PEDIDO = registro["D1_PEDIDO"].ToString().Trim(),
+                                D1_OPER = registro["D1_OPER"].ToString().Trim(),
+                                D1_VALDESC = (decimal)registro["D1_VALDESC"],
+                                D1_VUNIT = (decimal)registro["D1_VUNIT"],
+                                D1_QUANT = (int)registro["D1_QUANT"],
+                                D1_SEGURO = (decimal)registro["D1_SEGURO"],
+                                D1_TOTAL = (decimal)registro["D1_TOTAL"],
+                                D1_VALFRE = (decimal)registro["D1_VALFRE"],
+                                D1_VALICM = (decimal)registro["D1_VALICM"],
+                                D1_VALIPI = (decimal)registro["D1_VALIPI"],
+                                D1_VLDESC = (decimal)registro["D1_VLDESC"],
+                                D1_MSBLQL = registro["D1_MSBLQL"].ToString().Trim(),
                             };
 
                             // Adiciona a Array de Itens
-                            pedidoCompra.PEDIDO_ITENS.Add(item);
+                            recebimento.PRENOTA_ITENS.Add(item);
                         }
                     }
                     else
                     {
                         // Define a mensagem de erro
-                        strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum item associado ao Pedido Nº {intCodPedComWebsupply}";
+                        strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum item associado ao Pedido Nº {intCodRecComWebsupply}";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, 0, "", null, strMensagem,
-                                         "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -174,10 +198,10 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Cria o Parametro da query do banco
                     arrParam = new ArrayList();
 
-                    arrParam.Add(new Parametro("@iCdgPed", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
-                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Pedido_Compras_Anexos_Sel", arrParam), ref arrOut).Tables[0];
+                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar anexos do pedido]", arrParam), ref arrOut).Tables[0];
 
                     // Encerra a Conexão com Banco de Dados
                     conn.Dispose();
@@ -192,7 +216,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             var registro = DadosAnexos.Rows[i];
 
                             // Carrega os Dados do Anexo
-                            PedidoCompraModel.Anexo anexo = new PedidoCompraModel.Anexo
+                            RecebimentoModel.Anexo anexo = new RecebimentoModel.Anexo
                             {
                                 ID_DOC = registro["ID_DOC"].ToString().Trim(),
                                 DOC = registro["DOC"].ToString().Trim(),
@@ -200,20 +224,20 @@ namespace WebsupplyHHemo.Interface.Metodos
                             };
 
                             // Adiciona a Array de Itens
-                            pedidoCompra.ANEXOS.Add(anexo);
+                            recebimento.ANEXOS.Add(anexo);
                         }
                     }
 
                     // Serializa o objeto para JSON
-                    string jsonRequestBody = JsonConvert.SerializeObject(pedidoCompra);
+                    string jsonRequestBody = JsonConvert.SerializeObject(recebimento);
 
                     // Atualiza o Identificador
-                    strIdentificador = (pedidoCompra.C7_NUM != String.Empty ? "Alt" : "Cad") + strIdentificador;
+                    strIdentificador = (strFuncao.ToString().Trim() == "Enviar" ? "Cad" : "Exc") + strIdentificador;
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                     "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -223,7 +247,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Define os parâmetros e cria a chamada
                     var request = new HttpRequestMessage
                     {
-                        Method = pedidoCompra.C7_NUM != String.Empty ? HttpMethod.Put : HttpMethod.Post,
+                        Method = strFuncao.ToString().Trim() == "Enviar" ? HttpMethod.Post : HttpMethod.Put,
                         RequestUri = new Uri(objServico.strURL),
                         Content = content
                     };
@@ -237,7 +261,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Gera Log com o retorno da API
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                     "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -273,54 +297,22 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     // Gera Log com o retorno da API
                                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                                      0, (int)response.StatusCode, retornoAPIModel, null, "Erro no Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                                     "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                                     objLog.GravaLog();
                                     objLog = null;
 
                                     return false;
                                 }
-
-                                // Sincroniza o Retorno da API com os Parametros
-                                strCodPedComProtheus = linhaRetorno["C7_COD"].ToString().Trim();
-
-                                // Valida se algum dos códigos retornou vázio
-                                // caso sim, devolve erro
-                                if (strCodPedComProtheus == String.Empty)
-                                {
-                                    strMensagem = $"Ocorreu um erro na chamada da aplicação - [{linhaRetorno["C_STATUS"].ToString().Trim()}] - C7_NUM [{strCodPedComProtheus}]";
-
-                                    return false;
-                                }
-
-                                // Caso o Pedido não tenha código do protheus, armazena essa informação no banco
-                                if (pedidoCompra.C7_NUM == String.Empty)
-                                {
-                                    // Realiza a Chamada do Banco
-                                    conn = new Conexao(Mod_Gerais.ConnectionString());
-
-                                    // Cria o Parametro da query do banco
-                                    ArrayList arrParam2 = new ArrayList();
-
-                                    arrParam2.Add(new Parametro("@iCdgPed", intCodPedComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
-                                    arrParam2.Add(new Parametro("@vNumPedInt", strCodPedComProtheus, SqlDbType.Char, 15, ParameterDirection.Input));
-
-                                    ArrayList arrOut2 = new ArrayList();
-
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Pedido_Compras_NumPedInt_UPD", arrParam2), ref arrOut2);
-
-                                    // Encerra a Conexão com Banco de Dados
-                                    conn.Dispose();
-                                }
                             }
                         }
 
                         // Define a mensagem de sucesso
-                        strMensagem = $"Pedido Nº {intCodPedComWebsupply} do codigo [{(strCodPedComProtheus != String.Empty ? strCodPedComProtheus : pedidoCompra.C7_NUM)}] {(pedidoCompra.C7_NUM != String.Empty ? "atualizado(a)" : "cadastrado(a)")} com sucesso.";
+                        strMensagem = $"Recebimento Nº {intCodRecComWebsupply} da loja [{(strCodLojaProtheus != String.Empty ? strCodLojaProtheus : recebimento.F1_LOJA)}] {(strFuncao.ToString().Trim() == "Enviar" ? "cadastrado(a)" : "atualizado(a)")} com sucesso.";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, 0, "", null, strMensagem,
-                                         "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -335,7 +327,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, (int)response.StatusCode, "", null, strMensagem,
-                                         "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -345,12 +337,12 @@ namespace WebsupplyHHemo.Interface.Metodos
                 else
                 {
                     // Define a mensagem de erro
-                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Pedido Nº {intCodPedComWebsupply}";
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Pedido Nº {intCodRecComWebsupply}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, "", null, strMensagem,
-                                     "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -365,7 +357,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  1, -1, "", null, strMensagem,
-                                 "L", intCodPedComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                 "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 

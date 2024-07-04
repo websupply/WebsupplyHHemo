@@ -63,6 +63,7 @@
     <Compile Include="Metodos\NaturezaMetodo.cs" />
     <Compile Include="Metodos\PedidoCompraMetodo.cs" />
     <Compile Include="Metodos\PlanoContaMetodo.cs" />
+    <Compile Include="Metodos\RecebimentoMetodo.cs" />
     <Compile Include="Metodos\TipoOperacaoMetodo.cs" />
     <Compile Include="Metodos\UnidadeMedidaMetodo.cs" />
     <Compile Include="Metodos\UnidadesFiliaisMetodo.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Model\NaturezaModel.cs" />
     <Compile Include="Model\PedidoCompraModel.cs" />
     <Compile Include="Model\PlanoContaModel.cs" />
+    <Compile Include="Model\RecebimentoModel.cs" />
     <Compile Include="Model\RetornoAPIModel.cs" />
     <Compile Include="Model\TipoOperacaoModel.cs" />
     <Compile Include="Model\UnidadeMedidaModel.cs" />

@@ -37,5 +37,13 @@ namespace WebsupplyHHemo.Interface.Model
         public string A2_DVCTA { get; set; }
         public string A2_XCGCDEP { get; set; }
         public string A2_MSBLQL { get; set; }
+        public List<Anexo> ANEXOS { get; set; }
+
+        public class Anexo
+        {
+            public string ID_DOC { get; set; }
+            public string DOC { get; set; }
+            public string DOCX64 { get; set; }
+        }
     }
 }

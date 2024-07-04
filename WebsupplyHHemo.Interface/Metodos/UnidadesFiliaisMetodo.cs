@@ -145,7 +145,9 @@ namespace WebsupplyHHemo.Interface.Metodos
                             {
                                 CGC = "26398136000195",
                                 CodUnidade = linhaRetorno["M0_CODFIL"].ToString().Trim(),
-                                NomeCompleto = linhaRetorno["M0_NOMECOM"].ToString().Trim(),
+                                RazSoc = linhaRetorno["M0_NOMECOM"].ToString().Trim(),
+                                Descricao = linhaRetorno["M0_FILIAL"].ToString().Trim(),
+                                GrupoEconomico = linhaRetorno["M0_CODIGO"].ToString().Trim(),
                                 Cidade = linhaRetorno["M0_CIDENT"].ToString().Trim(),
                                 IE = linhaRetorno["M0_INSC"].ToString().Trim(),
                                 Bairro = linhaRetorno["M0_BAIRENT"].ToString().Trim(),
@@ -164,7 +166,9 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                             arrParam.Add(new Parametro("@cCGC", unidade.CGC == "" ? null : unidade.CGC.ToString(), SqlDbType.VarChar, 15, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@vCodEmpresa", unidade.CodUnidade == "" ? null : unidade.CodUnidade.ToString(), SqlDbType.VarChar, 500, ParameterDirection.Input));
-                            arrParam.Add(new Parametro("@vDescEmpresa", unidade.NomeCompleto == "" ? null : unidade.NomeCompleto.ToString(), SqlDbType.VarChar, 2000, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@vDescEmpresa", unidade.RazSoc == "" ? null : unidade.RazSoc.ToString(), SqlDbType.VarChar, 2000, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@vDescFilial", unidade.Descricao == "" ? null : unidade.Descricao.ToString(), SqlDbType.VarChar, 2000, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@vCODGRP_Economico", unidade.GrupoEconomico == "" ? null : unidade.GrupoEconomico.ToString(), SqlDbType.VarChar, 10, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@vCidade", unidade.Cidade == "" ? null : unidade.Cidade.ToString(), SqlDbType.VarChar, 100, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@vIE", unidade.IE == "" ? null : unidade.IE.ToString(), SqlDbType.VarChar, 100, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@vBairro", unidade.Bairro == "" ? null : unidade.Bairro.ToString(), SqlDbType.VarChar, 100, ParameterDirection.Input));

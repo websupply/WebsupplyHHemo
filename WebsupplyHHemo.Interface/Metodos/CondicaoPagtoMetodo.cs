@@ -160,7 +160,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     CondicaoPagtoModel condicaoPagto = new CondicaoPagtoModel
                                     {
                                         CodCondicaoPagto = linhaRetorno["E4_CODIGO"].ToString().Trim(),
-                                        Descricao = linhaRetorno["E4_DESCRI"].ToString().Trim()
+                                        Descricao = linhaRetorno["E4_DESCRI"].ToString().Trim(),
+                                        Status = linhaRetorno["E4_MBSLQL"].ToString().Trim()
                                     };
 
                                     // Cria o Parametro da query do banco
@@ -169,6 +170,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                     arrParam2.Add(new Parametro("@vCod_FPagto_Cliente", condicaoPagto.CodCondicaoPagto.ToString(), SqlDbType.Char, 10, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vDescricao", condicaoPagto.Descricao == "" ? null : condicaoPagto.Descricao.ToString(), SqlDbType.VarChar, 100, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@vStatus", condicaoPagto.Status == "" ? null : condicaoPagto.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
                                     ArrayList arrOut2 = new ArrayList();
 

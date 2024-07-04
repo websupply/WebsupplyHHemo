@@ -43,6 +43,7 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine($"strMensagem: {fornecedorMetodo.strMensagem}");
             Console.WriteLine($"intCodForWebsupply: {fornecedorMetodo.intCodForWebsupply}");
             Console.WriteLine($"strCodForProtheus: {fornecedorMetodo.strCodForProtheus}");
+            Console.WriteLine($"strCodLojaProtheus: {fornecedorMetodo.strCodLojaProtheus}");
         }
 
         [TestMethod]
@@ -55,12 +56,39 @@ namespace WebsupplyHHemo.Teste
         }
 
         [TestMethod]
+        public void InterfacePedidoCompra()
+        {
+            PedidoCompraMetodo pedidoCompraMetodo = new PedidoCompraMetodo();
+
+            pedidoCompraMetodo.intCodPedComWebsupply = 323747;
+
+            Console.WriteLine($"Retorno: {pedidoCompraMetodo.ConsomeWS()}");
+            Console.WriteLine($"strMensagem: {pedidoCompraMetodo.strMensagem}");
+            Console.WriteLine($"intCodPedComWebsupply: {pedidoCompraMetodo.intCodPedComWebsupply}");
+            Console.WriteLine($"strCodPedComProtheus: {pedidoCompraMetodo.strCodPedComProtheus}");
+            Console.WriteLine($"strCodLojaProtheus: {pedidoCompraMetodo.strCodLojaProtheus}");
+        }
+
+        [TestMethod]
         public void InterfacePlanoConta()
         {
             PlanoContaMetodo planoConta = new PlanoContaMetodo();
 
             Console.WriteLine(planoConta.ConsomeWS());
             Console.WriteLine(planoConta.strMensagem);
+        }
+
+        [TestMethod]
+        public void InterfaceRecebimento()
+        {
+            RecebimentoMetodo recebimentoMetodo = new RecebimentoMetodo();
+
+            recebimentoMetodo.intCodRecComWebsupply = 323747;
+            recebimentoMetodo.strFuncao = "Enviar";
+
+            Console.WriteLine($"Retorno: {recebimentoMetodo.ConsomeWS()}");
+            Console.WriteLine($"strMensagem: {recebimentoMetodo.strMensagem}");
+            Console.WriteLine($"intCodRecComWebsupply: {recebimentoMetodo.intCodRecComWebsupply}");
         }
 
         [TestMethod]

@@ -119,6 +119,42 @@ namespace WebsupplyHHemo.Interface.Metodos
                         A2_MSBLQL = DadosFornecedor.Rows[0]["A2_MSBLQL"].ToString().Trim()
                     };
 
+                    // Realiza a Chamada do Banco
+                    conn = new Conexao(Mod_Gerais.ConnectionString());
+
+                    // Cria o Parametro da query do banco
+                    arrParam = new ArrayList();
+
+                    arrParam.Add(new Parametro("@iCL_CDG", intCodForWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+
+                    arrOut = new ArrayList();
+                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar anexos do pedido]", arrParam), ref arrOut).Tables[0];
+
+                    // Encerra a Conexão com Banco de Dados
+                    conn.Dispose();
+
+                    // Verifica se Existe itens para o pedido e caso sim, traz
+                    // os itens e caso não, retorna erro
+                    if (DadosAnexos.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < DadosAnexos.Rows.Count; i++)
+                        {
+                            // Pega a Linha do Registro
+                            var registro = DadosAnexos.Rows[i];
+
+                            // Carrega os Dados do Anexo
+                            FornecedorModel.Anexo anexo = new FornecedorModel.Anexo
+                            {
+                                ID_DOC = registro["ID_DOC"].ToString().Trim(),
+                                DOC = registro["DOC"].ToString().Trim(),
+                                DOCX64 = registro["DOCX64"].ToString().Trim(),
+                            };
+
+                            // Adiciona a Array de Itens
+                            fornecedor.ANEXOS.Add(anexo);
+                        }
+                    }
+
                     // Serializa o objeto para JSON
                     string jsonRequestBody = JsonConvert.SerializeObject(fornecedor);
 
@@ -202,7 +238,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 // caso sim, devolve erro
                                 if (strCodForProtheus == String.Empty || strCodLojaProtheus == String.Empty)
                                 {
-                                    strMensagem = $"Ocorreu um erro na chamada da aplicação - [{linhaRetorno["C_STATUS"].ToString().Trim()}] - A2_LOJA [{strCodLojaProtheus}] - A2_COD [{strCodLojaProtheus}]";
+                                    strMensagem = $"Ocorreu um erro na chamada da aplicação - [{linhaRetorno["C_STATUS"].ToString().Trim()}] - A2_LOJA [{strCodLojaProtheus}] - A2_COD [{strCodForProtheus}]";
 
                                     return false;
                                 }
