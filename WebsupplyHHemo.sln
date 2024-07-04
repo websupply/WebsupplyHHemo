@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsupplyHHemo.API", "Websu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsupplyHHemo.Teste", "WebsupplyHHemo.Teste\WebsupplyHHemo.Teste.csproj", "{749861F2-5064-4AC5-95EF-CAF7C93E7037}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebsupplyHHemo.InterfaceNew", "WebsupplyHHemo.InterfaceNew\WebsupplyHHemo.InterfaceNew.csproj", "{157F88F2-F355-47C0-8AEF-613AEBBCEF49}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsupplyHHemo.Interface", "WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj", "{01DD9813-521D-4C00-A8E8-DCEE2E1D4CD0}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{749861F2-5064-4AC5-95EF-CAF7C93E7037}.Release|Any CPU.Build.0 = Release|Any CPU
-		{157F88F2-F355-47C0-8AEF-613AEBBCEF49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{157F88F2-F355-47C0-8AEF-613AEBBCEF49}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{157F88F2-F355-47C0-8AEF-613AEBBCEF49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{157F88F2-F355-47C0-8AEF-613AEBBCEF49}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01DD9813-521D-4C00-A8E8-DCEE2E1D4CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{01DD9813-521D-4C00-A8E8-DCEE2E1D4CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01DD9813-521D-4C00-A8E8-DCEE2E1D4CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
