@@ -169,7 +169,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     UnidadeMedidaModel unidadeMedida = new UnidadeMedidaModel
                                     {
                                         Descricao = linhaRetorno["AH_DESCPO"].ToString().Trim(),
-                                        Sigla = linhaRetorno["AH_UNIMED"].ToString().Trim()
+                                        Sigla = linhaRetorno["AH_UNIMED"].ToString().Trim(),
+                                        Status = linhaRetorno["AH_MSBLQL"].ToString().Trim()
                                     };
 
                                     // Cria o Parametro da query do banco
@@ -178,6 +179,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                                     arrParam2.Add(new Parametro("@cUnidade", unidadeMedida.Sigla.ToString(), SqlDbType.Char, 4, ParameterDirection.Input));
                                     arrParam2.Add(new Parametro("@vDescrUnidade", unidadeMedida.Descricao == "" ? null : unidadeMedida.Descricao.ToString(), SqlDbType.VarChar, 50, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@cStatus", unidadeMedida.Status == "" ? null : unidadeMedida.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
 
                                     ArrayList arrOut2 = new ArrayList();
 

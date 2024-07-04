@@ -7,22 +7,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using WebsupplyHHemo.Interface.Funcoes;
-using WebsupplyHHemo.Interface.Model;
+using WebsupplyHHemo.InterfaceNew.Funcoes;
+using WebsupplyHHemo.InterfaceNew.Model;
 
-namespace WebsupplyHHemo.Interface.Metodos
+namespace WebsupplyHHemo.InterfaceNew.Metodos
 {
-    public class PlanoContaMetodo
+    public class CondicaoPagtoMetodo
     {
         static int _intNumTransacao = 0;
-        static int _intNumServico = 3;
-        string strIdentificador = "PlanoConta" + Mod_Gerais.RetornaIdentificador();
+        static int _intNumServico = 4;
+        string strIdentificador = "CondPagt" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
-        public string intCodFilial = string.Empty;
+
 
         private static int intNumTransacao
         {
@@ -37,7 +36,7 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
         }
 
-        public bool ConsomeWS()
+        public async Task<bool> CadastraAtualiza()
         {
             bool retorno = false;
             Class_Log_Hhemo objLog;
@@ -49,7 +48,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
+                                 0, 0, "", null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
@@ -74,11 +73,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
-
-                arrParam.Add(new Parametro("@cCodFilial", intCodFilial, SqlDbType.VarChar, 500, ParameterDirection.Input));
-
                 ArrayList arrOut = new ArrayList();
-
                 DataTable DadosUnidade = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CONSULTA_EMPRESAS_INTERFACE_SEL", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados
@@ -104,8 +99,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                             {
                                 tokenid = "HH@2021!%",
                                 M0_CODIGO = "01",
-                                M0_CODFIL = DadosUnidade.Rows[i]["codigo"],
-                                CT1_CONTA = "*",
+                                M0_CODFIL = DadosUnidade.Rows[i]["codigo"], // Incluir o CodFilial
+                                E4_CODIGO = "*",
                                 ROWINI = linhaInicial,
                                 ROWLINES = limiteRegistrosPagina
                             };
@@ -113,45 +108,22 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Serializa o objeto para JSON
                             string jsonRequestBody = JsonConvert.SerializeObject(requestBody);
 
-                            // Gera Log
-                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                             0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                             "L", "", "", Mod_Gerais.MethodName());
-                            objLog.GravaLog();
-                            objLog = null;
-
                             // Adiciona o JSON como conteúdo da requisição
                             var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
-
-                            // Carrega os Dados de Autenticação
-                            var base64EncodedAuth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{objServico.strUsuario}:{objServico.strSenha}"));
 
                             // Define os parâmetros e cria a chamada
                             var request = new HttpRequestMessage
                             {
                                 Method = HttpMethod.Get,
                                 RequestUri = new Uri(objServico.strURL),
-                                Content = content,
-                                Headers =
-                                {
-                                    Authorization = new AuthenticationHeaderValue($"{objServico.strTipoAutenticao}", base64EncodedAuth)
-                                }
+                                Content = content
                             };
 
                             // Envia a requisição
-                            var response = cliente.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
-
-                            // Trata o Retorno da API
-                            var responseBody = response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-
-                            // Gera Log com o retorno da API
-                            objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                             0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                             "L", "", "", Mod_Gerais.MethodName());
-                            objLog.GravaLog();
-                            objLog = null;
-
+                            var response = await cliente.SendAsync(request).ConfigureAwait(false);
                             response.EnsureSuccessStatusCode();
+
+                            var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                             // Trata o Retorno e aloca no objeto
                             JArray retornoAPI = JArray.Parse(responseBody);
@@ -169,26 +141,22 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     JObject linhaRetorno = JObject.Parse(retornoAPI[j].ToString());
 
                                     // Sincroniza o Retorno da API com a Classe de Gerenciamento
-                                    PlanoContaModel planoConta = new PlanoContaModel
+                                    CondicaoPagtoModel condicaoPagto = new CondicaoPagtoModel
                                     {
-                                        ContaContabil = linhaRetorno["CT1_CONTA"].ToString().Trim(),
-                                        Descricao = linhaRetorno["CT1_DESC01"].ToString().Trim(),
-                                        Status = linhaRetorno["CT1_MSBLQL"].ToString().Trim()
+                                        CodCondicaoPagto = linhaRetorno["E4_CODIGO"].ToString().Trim(),
+                                        Descricao = linhaRetorno["E4_DESCRI"].ToString().Trim()
                                     };
 
                                     // Cria o Parametro da query do banco
 
                                     ArrayList arrParam2 = new ArrayList();
 
-                                    arrParam2.Add(new Parametro("@cCGC", DadosUnidade.Rows[i]["cgc"], SqlDbType.Char, 15, ParameterDirection.Input));
-                                    arrParam2.Add(new Parametro("@vCodFilial", DadosUnidade.Rows[i]["codigo"], SqlDbType.VarChar, 500, ParameterDirection.Input));
-                                    arrParam2.Add(new Parametro("@cCCONTABIL", planoConta.ContaContabil.ToString(), SqlDbType.Char, 20, ParameterDirection.Input));
-                                    arrParam2.Add(new Parametro("@vDescricao", planoConta.Descricao == "" ? null : planoConta.Descricao.ToString(), SqlDbType.VarChar, 60, ParameterDirection.Input));
-                                    arrParam2.Add(new Parametro("@cStatus", planoConta.Status == "" ? null : planoConta.Status.ToString(), SqlDbType.Char, 1, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@vCod_FPagto_Cliente", condicaoPagto.CodCondicaoPagto.ToString(), SqlDbType.Char, 10, ParameterDirection.Input));
+                                    arrParam2.Add(new Parametro("@vDescricao", condicaoPagto.Descricao == "" ? null : condicaoPagto.Descricao.ToString(), SqlDbType.VarChar, 100, ParameterDirection.Input));
 
                                     ArrayList arrOut2 = new ArrayList();
 
-                                    conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_PLANOCONTA_INSUPD", arrParam2), ref arrOut2);
+                                    //conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_FormasDePagto_Ins_UPD", arrParam), ref arrOut);
                                 }
 
                                 // Encerra a Conexão com Banco de Dados
@@ -208,7 +176,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         // Retorna a Mensagem de Sucesso
                         if (totalRegistros > 0)
                         {
-                            strMensagemInterna = $"{totalRegistros} Plano(s) de Conta(s) cadastrados/atualizados com sucesso para a Empresa {DadosUnidade.Rows[i]["descricao"]}";
+                            strMensagemInterna = $"{totalRegistros} Condições de Pagamentos cadastradas/atualizadas com sucesso para a Empresa {DadosUnidade.Rows[i]["descricao"]}";
                             strMensagem += strMensagemInterna + "\n";
                         }
                         else
