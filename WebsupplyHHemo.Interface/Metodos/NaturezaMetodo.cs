@@ -170,7 +170,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                         CodNatureza = linhaRetorno["ED_CODIGO"].ToString().Trim(),
                                         CodFilial = linhaRetorno["M0_CODFIL"].ToString().Trim(),
                                         Descricao = linhaRetorno["ED_DESCRIC"].ToString().Trim(),
-                                        Status = linhaRetorno["ED_MSBLQL"].ToString().Trim() == "1" ? "N" : "S",
+                                        Status = linhaRetorno["ED_MSBLQL"].ToString().Trim(),
                                     };
 
                                     // Cria o Parametro da query do banco
