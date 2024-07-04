@@ -8,6 +8,7 @@ using System.Text;
 using WebsupplyHHemo.Interface.Funcoes;
 using WebsupplyHHemo.Interface.Model;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
@@ -171,12 +172,19 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Adiciona o JSON como conteúdo da requisição
                     var content = new StringContent(jsonRequestBody, Encoding.UTF8, "application/json");
 
+                    // Carrega os Dados de Autenticação
+                    var base64EncodedAuth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{objServico.strUsuario}:{objServico.strSenha}"));
+
                     // Define os parâmetros e cria a chamada
                     var request = new HttpRequestMessage
                     {
                         Method = fornecedor.A2_COD != String.Empty ? HttpMethod.Put : HttpMethod.Post,
                         RequestUri = new Uri(objServico.strURL),
-                        Content = content
+                        Content = content,
+                        Headers =
+                                {
+                                    Authorization = new AuthenticationHeaderValue($"{objServico.strTipoAutenticao}", base64EncodedAuth)
+                                }
                     };
 
                     // Envia a requisição

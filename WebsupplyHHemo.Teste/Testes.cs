@@ -66,7 +66,6 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine($"strMensagem: {pedidoCompraMetodo.strMensagem}");
             Console.WriteLine($"intCodPedComWebsupply: {pedidoCompraMetodo.intCodPedComWebsupply}");
             Console.WriteLine($"strCodPedComProtheus: {pedidoCompraMetodo.strCodPedComProtheus}");
-            Console.WriteLine($"strCodLojaProtheus: {pedidoCompraMetodo.strCodLojaProtheus}");
         }
 
         [TestMethod]

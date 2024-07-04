@@ -14,6 +14,10 @@ namespace WebsupplyHHemo.Interface.Funcoes
         #region Propriedades
 
         public string strURL { get; set; }
+        public string strTipoAutenticao { get; set; }
+        public string strDominio { get; set; }
+        public string strUsuario { get; set; }
+        public string strSenha { get; set; }
 
         #endregion
 
@@ -52,7 +56,7 @@ namespace WebsupplyHHemo.Interface.Funcoes
                 //     strNomeMaquina.ToString().ToUpper() == "SRVWEB2")
                 // {
                 //     _strCodAmbiente = "PRD";
-                // }
+                // }SP_WEBSERVICES_RECUPERA_ENDERECO
                 // else
                 // {
                 //     _strCodAmbiente = "DEV";
@@ -78,6 +82,10 @@ namespace WebsupplyHHemo.Interface.Funcoes
                                             _intIDServico.ToString() + " - _strCodAmbiente = " + _strCodAmbiente);
                     }
                     strURL = _dtRetorno.Rows[0]["URL"].ToString();
+                    strTipoAutenticao = _dtRetorno.Rows[0]["TipoAutenticao"].ToString();
+                    strDominio = _dtRetorno.Rows[0]["Dominio"].ToString();
+                    strUsuario = _dtRetorno.Rows[0]["Usuario"].ToString();
+                    strSenha = _dtRetorno.Rows[0]["Senha"].ToString();
                 }
                 else
                 {
