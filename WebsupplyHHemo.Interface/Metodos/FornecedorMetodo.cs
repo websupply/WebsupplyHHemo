@@ -109,6 +109,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         A2_COD_MUN = DadosFornecedor.Rows[0]["A2_COD_MUN"].ToString().Trim(),
                         A2_DDD = DadosFornecedor.Rows[0]["A2_DDD"].ToString().Trim(),
                         A2_TEL = DadosFornecedor.Rows[0]["A2_TEL"].ToString().Trim(),
+                        A2_CONTATO = DadosFornecedor.Rows[0]["A2_CONTATO"].ToString().Trim(),
                         A2_FORMPAG = DadosFornecedor.Rows[0]["A2_FORMPAG"].ToString().Trim(),
                         A2_TIPCTA = DadosFornecedor.Rows[0]["A2_TIPCTA"].ToString().Trim(),
                         A2_BANCO = DadosFornecedor.Rows[0]["A2_BANCO"].ToString().Trim(),
