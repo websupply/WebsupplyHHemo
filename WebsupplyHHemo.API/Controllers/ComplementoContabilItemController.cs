@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebsupplyHHemo.API.Dto;
 using WebsupplyHHemo.API.ADO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebsupplyHHemo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ComplementoContabilItemController : ControllerBase
     {
         private readonly IConfiguration _configuration;
