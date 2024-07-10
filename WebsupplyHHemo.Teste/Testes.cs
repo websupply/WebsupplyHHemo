@@ -60,7 +60,7 @@ namespace WebsupplyHHemo.Teste
         {
             PedidoCompraMetodo pedidoCompraMetodo = new PedidoCompraMetodo();
 
-            pedidoCompraMetodo.intCodPedComWebsupply = 323747;
+            pedidoCompraMetodo.intCodPedComWebsupply = 2359956;
 
             Console.WriteLine($"Retorno: {pedidoCompraMetodo.ConsomeWS()}");
             Console.WriteLine($"strMensagem: {pedidoCompraMetodo.strMensagem}");

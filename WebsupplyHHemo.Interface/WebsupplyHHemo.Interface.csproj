@@ -60,9 +60,11 @@
     <Compile Include="Metodos\CondicaoPagtoMetodo.cs" />
     <Compile Include="Metodos\FormaPagtoMetodo.cs" />
     <Compile Include="Metodos\FornecedorMetodo.cs" />
+    <Compile Include="Metodos\GrupoItensMetodo.cs" />
     <Compile Include="Metodos\NaturezaMetodo.cs" />
     <Compile Include="Metodos\PedidoCompraMetodo.cs" />
     <Compile Include="Metodos\PlanoContaMetodo.cs" />
+    <Compile Include="Metodos\ProdutosMetodo.cs" />
     <Compile Include="Metodos\RecebimentoMetodo.cs" />
     <Compile Include="Metodos\TipoOperacaoMetodo.cs" />
     <Compile Include="Metodos\UnidadeMedidaMetodo.cs" />
@@ -73,9 +75,11 @@
     <Compile Include="Model\CondicaoPagtoModel.cs" />
     <Compile Include="Model\FormaPagtoModel.cs" />
     <Compile Include="Model\FornecedorModel.cs" />
+    <Compile Include="Model\GruposItensModel.cs" />
     <Compile Include="Model\NaturezaModel.cs" />
     <Compile Include="Model\PedidoCompraModel.cs" />
     <Compile Include="Model\PlanoContaModel.cs" />
+    <Compile Include="Model\ProdutosModel.cs" />
     <Compile Include="Model\RecebimentoModel.cs" />
     <Compile Include="Model\RetornoAPIModel.cs" />
     <Compile Include="Model\TipoOperacaoModel.cs" />

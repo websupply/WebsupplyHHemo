@@ -93,17 +93,18 @@ namespace WebsupplyHHemo.Interface.Metodos
                         M0_CODFIL = DadosPedidoCompra.Rows[0]["M0_CODFIL"].ToString().Trim(),
                         M0_CODIGO = DadosPedidoCompra.Rows[0]["M0_CODIGO"].ToString().Trim(),
                         C7_COND = DadosPedidoCompra.Rows[0]["C7_COND"].ToString().Trim(),
-                        C7_DESPESA_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_DESPESA_TOTAL"],
+                        C7_DESPESA_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_DESPESA_TOTAL"].ToString().Trim()),
                         C7_EMISSAO = DadosPedidoCompra.Rows[0]["C7_EMISSAO"].ToString().Trim(),
                         C7_FILENT = DadosPedidoCompra.Rows[0]["C7_FILENT"].ToString().Trim(),
                         C7_FORNECE = DadosPedidoCompra.Rows[0]["C7_FORNECE"].ToString().Trim(),
                         C7_LOJA = DadosPedidoCompra.Rows[0]["C7_LOJA"].ToString().Trim(),
                         C7_NUM = DadosPedidoCompra.Rows[0]["C7_NUM"].ToString().Trim(),
                         UUID_WEBSUPPLY = DadosPedidoCompra.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
-                        C7_SEGURO_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_SEGURO_TOTAL"],
-                        C7_VALFRE_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VALFRE_TOTAL"],
-                        C7_VLDESC_TOTAL = (decimal)DadosPedidoCompra.Rows[0]["C7_VLDESC_TOTAL"],
-                        C7_MSBLQL = DadosPedidoCompra.Rows[0]["A2_MSBLQL"].ToString().Trim()
+                        C7_SEGURO_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_SEGURO_TOTAL"].ToString().Trim()),
+                        C7_VALFRE_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_VALFRE_TOTAL"].ToString().Trim()),
+                        C7_VLDESC_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_VLDESC_TOTAL"].ToString().Trim()),
+                        PEDIDO_ITENS = new List<PedidoCompraModel.Item>(),
+                        ANEXOS = new List<PedidoCompraModel.Anexo>()
                     };
 
                     // Realiza a Chamada do Banco
@@ -140,7 +141,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 C7_OBS = registro["C7_OBS"].ToString().Trim(),
                                 C7_PRECO = (decimal)registro["C7_PRECO"],
                                 C7_PRODUTO = registro["C7_PRODUTO"].ToString().Trim(),
-                                C7_QUANT = (int)registro["C7_QUANT"],
+                                C7_QUANT = (decimal)registro["C7_QUANT"],
                                 C7_SEGURO = (decimal)registro["C7_SEGURO"],
                                 C7_TOTAL = (decimal)registro["C7_TOTAL"],
                                 C7_VALFRE = (decimal)registro["C7_VALFRE"],
@@ -289,7 +290,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 }
 
                                 // Sincroniza o Retorno da API com os Parametros
-                                strCodPedComProtheus = linhaRetorno["C7_COD"].ToString().Trim();
+                                strCodPedComProtheus = linhaRetorno["C7_NUM"].ToString().Trim();
 
                                 // Valida se algum dos códigos retornou vázio
                                 // caso sim, devolve erro

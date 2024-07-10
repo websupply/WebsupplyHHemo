@@ -43,7 +43,7 @@ namespace WebsupplyHHemo.Interface.Model
             public string C7_OBS { get; set; }
             public decimal C7_PRECO { get; set; }
             public string C7_PRODUTO { get; set; }
-            public int C7_QUANT { get; set; }
+            public decimal C7_QUANT { get; set; }
             public decimal C7_SEGURO { get; set; }
             public decimal C7_TOTAL { get; set; }
             public decimal C7_VALFRE { get; set; }
