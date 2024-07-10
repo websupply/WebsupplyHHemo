@@ -75,7 +75,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@cCdgCateg", strCodGrpItmWebsupply, SqlDbType.VarChar, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@cCdgCateg", strCodGrpItmWebsupply, SqlDbType.VarChar, 6, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
                 DataTable DadosGrupoItens = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Produtos_Categorias_Sel", arrParam), ref arrOut).Tables[0];
@@ -249,7 +249,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 else
                 {
                     // Define a mensagem de erro
-                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao CodFornecedor {strCodGrpItmWebsupply}";
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Grupo de Itens {strCodGrpItmWebsupply}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,

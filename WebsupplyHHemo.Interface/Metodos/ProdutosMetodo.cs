@@ -75,7 +75,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@cCodProd", strCodPrdWebsupply, SqlDbType.VarChar, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@cCodProd", strCodPrdWebsupply, SqlDbType.Char, 10, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
                 DataTable DadosGrupoItens = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_Produtos_Sel", arrParam), ref arrOut).Tables[0];
@@ -89,11 +89,15 @@ namespace WebsupplyHHemo.Interface.Metodos
                     ProdutosModel gruposItens = new ProdutosModel
                     {
                         tokenid = DadosGrupoItens.Rows[0]["tokenid"].ToString().Trim(),
-                        M0_CODFIL = DadosGrupoItens.Rows[0]["M0_CODFIL"].ToString().Trim(),
                         M0_CODIGO = DadosGrupoItens.Rows[0]["M0_CODIGO"].ToString().Trim(),
+                        M0_CODFIL = DadosGrupoItens.Rows[0]["M0_CODFIL"].ToString().Trim(),
                         B1_COD = DadosGrupoItens.Rows[0]["B1_COD"].ToString().Trim(),
                         B1_DESC = DadosGrupoItens.Rows[0]["B1_DESC"].ToString().Trim(),
                         B1_DESC2 = DadosGrupoItens.Rows[0]["B1_DESC2"].ToString().Trim(),
+                        B1_UM = DadosGrupoItens.Rows[0]["B1_UM"].ToString().Trim(),
+                        B1_TIPO = DadosGrupoItens.Rows[0]["B1_TIPO"].ToString().Trim(),
+                        B1_POSIPI = DadosGrupoItens.Rows[0]["B1_POSIPI"].ToString().Trim(),
+                        B1_CONTA = DadosGrupoItens.Rows[0]["B1_CONTA"].ToString().Trim(),
                         B1_GRUPO = DadosGrupoItens.Rows[0]["B1_GRUPO"].ToString().Trim(),
                         B1_MSBLQL = DadosGrupoItens.Rows[0]["B1_MSBLQL"].ToString().Trim(),
                         UUID_WEBSUPPLY = DadosGrupoItens.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
@@ -251,7 +255,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 else
                 {
                     // Define a mensagem de erro
-                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao CodFornecedor {strCodPrdWebsupply}";
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Produto {strCodPrdWebsupply}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,

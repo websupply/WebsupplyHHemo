@@ -47,6 +47,19 @@ namespace WebsupplyHHemo.Teste
         }
 
         [TestMethod]
+        public void InterfaceGruposItens()
+        {
+            GrupoItensMetodo grupoItensMetodo = new GrupoItensMetodo();
+
+            grupoItensMetodo.strCodGrpItmWebsupply = "AB0000";
+
+            Console.WriteLine($"Retorno: {grupoItensMetodo.ConsomeWS()}");
+            Console.WriteLine($"strMensagem: {grupoItensMetodo.strMensagem}");
+            Console.WriteLine($"strCodGrpItmWebsupply: {grupoItensMetodo.strCodGrpItmWebsupply}");
+            Console.WriteLine($"strCodGrpItmProtheus: {grupoItensMetodo.strCodGrpItmProtheus}");
+        }
+
+        [TestMethod]
         public void InterfaceNatureza()
         {
             NaturezaMetodo naturezaMetodo = new NaturezaMetodo();
