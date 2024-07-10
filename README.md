@@ -50,6 +50,45 @@ Será necessário atualizar as dll's dentro do servidor em questão ou utilizar 
 ### Exemplo de Uso
 
 ```asp
+<!-- Grupos de Itens -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.GrupoItensMetodo")
+    wsWebsupply.strCodGrpItmWebsupply = "0"
+    wsWebsupply.strCodGrpItmProtheus = string.Empty;
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Produtos -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.ProdutosMetodo")
+    wsWebsupply.strCodPrdWebsupply = "0"
+    wsWebsupply.strCodPrdProtheus = string.Empty;
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
+<!-- Pedido de Compra -->
+<%
+    Dim wsWebsupply
+    set wsWebsupply = Server.CreateObject("WebsupplyHHemo.Interface.Metodos.PedidoCompraMetodo")
+    wsWebsupply.intCodPedComWebsupply = 0
+    wsWebsupply.strCodPedComProtheus = string.Empty;
+    if wsWebsupply.ConsomeWS() = True then
+        response.write "Deu bom"
+    else
+        response.write wsWebsupply.strMensagem
+    end if
+%>
+
 <!-- Fornecedor -->
 <%
     Dim wsWebsupply
