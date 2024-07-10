@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebsupplyHHemo.API.Dto;
+using WebsupplyHHemo.API.ADO;
 
 namespace WebsupplyHHemo.API.Controllers
 {
@@ -16,9 +17,24 @@ namespace WebsupplyHHemo.API.Controllers
 
         [HttpPost]
         [Route("complemento-item")]
-        public Object ComplementoItem(ComplementoContabilItemRequestDto objRequest)
+        public ObjectResult ComplementoItem(ComplementoContabilItemRequestDto objRequest)
         {
-            return new Object();
+            ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
+
+            if(!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
+            {
+                return new ObjectResult(new
+                {
+                    Mensagem = objADO.strMensagem
+                })
+                { StatusCode = 500 };
+            }
+
+            return new ObjectResult(new
+            {
+                Mensagem = objADO.strMensagem
+            })
+            { StatusCode = 200 };
         }
     }
 }
