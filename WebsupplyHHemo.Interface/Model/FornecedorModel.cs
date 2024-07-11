@@ -29,6 +29,7 @@ namespace WebsupplyHHemo.Interface.Model
         public string A2_DDD { get; set; }
         public string A2_TEL { get; set; }
         public string A2_CONTATO { get; set; }
+        public string A2_EMAIL { get; set; }
         public string A2_FORMPAG { get; set; }
         public string A2_TIPCTA { get; set; }
         public string A2_BANCO { get; set; }

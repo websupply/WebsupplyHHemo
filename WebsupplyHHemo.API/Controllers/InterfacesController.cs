@@ -19,37 +19,86 @@ namespace WebsupplyHHemo.API.Controllers
         [Route("consome-interface/{interfaceWS}")]
         public ObjectResult ConsomeInterface(string interfaceWS)
         {
-            return Ok(interfaceWS);
             // Variaveis de Controle
-            //string strMensagem consomeWS;
+            string strMensagem = string.Empty;
+            bool retornoInterface = false;
 
             // Verifica qual chamada ira realizar, e caso seja
             // uma chamada invalida, devolve erro
-            //interfaceWS.ToLower() switch
-            //{
-            //    "centroscustos" => consomeWS = new CentroCustoMetodo.ConsomeWS()
-            //    "centroscustos" => new ObjectResult(new { CentrosCustos = DashboardADO.CARREGA_LISTA_CENTROSCUSTO_DASHBOARD_PROJETOS(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser, objDashboardProjetosEventosRequest) }),
-            //    "projetoseventos" => new ObjectResult(new { ProjetosEventos = DashboardADO.CARREGA_LISTA_PROJETOS_EVENTOS_DASHBOARD_PROJETOS(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser, objDashboardProjetosEventosRequest) }),
-            //    "fornecedores" => new ObjectResult(new { Fornecedores = DashboardADO.CARREGA_LISTA_FORNECEDORES_DASHBOARD_PROJETOS(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser, objDashboardProjetosEventosRequest, iIdProjetos) }),
-            //    "itens" => new ObjectResult(new { Itens = DashboardADO.CARREGA_LISTA_ITENS_DASHBOARD_PROJETOS(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser, objDashboardProjetosEventosRequest, iIdProjetos, cCGCF_SEL) }),
-            //    _ => new ObjectResult(new { Mensagem = "Tipo de Filtro Incorreto ou Não Parametrizado" }) { StatusCode = 400 }
-            //};
-            //CentroCustoMetodo centroCusto = new CentroCustoMetodo();
+            switch (interfaceWS.ToLower())
+            {
+                case "centro-custo":
+                    CentroCustoMetodo centroCustoMetodo = new CentroCustoMetodo();
 
-            //if (!centroCusto.ConsomeWS())
-            //{
-            //    return new ObjectResult(new
-            //    {
-            //        Mensagem = centroCusto.strMensagem
-            //    })
-            //    { StatusCode = 500 };
-            //}
+                    retornoInterface = centroCustoMetodo.ConsomeWS();
+                    strMensagem = centroCustoMetodo.strMensagem;
+                    break;
+                case "condicao-pagamento":
+                    CondicaoPagtoMetodo condicaoPagtoMetodo = new CondicaoPagtoMetodo();
 
-            //return new ObjectResult(new
-            //{
-            //    Mensagem = centroCusto.strMensagem
-            //})
-            //{ StatusCode = 200 };
+                    retornoInterface = condicaoPagtoMetodo.ConsomeWS();
+                    strMensagem = condicaoPagtoMetodo.strMensagem;
+                    break;
+                case "forma-pagamento":
+                    FormaPagtoMetodo formaPagtoMetodo = new FormaPagtoMetodo();
+
+                    retornoInterface = formaPagtoMetodo.ConsomeWS();
+                    strMensagem = formaPagtoMetodo.strMensagem;
+                    break;
+                case "natureza":
+                    NaturezaMetodo naturezaMetodo = new NaturezaMetodo();
+
+                    retornoInterface = naturezaMetodo.ConsomeWS();
+                    strMensagem = naturezaMetodo.strMensagem;
+                    break;
+                case "plano-conta":
+                    PlanoContaMetodo planoContaMetodo = new PlanoContaMetodo();
+
+                    retornoInterface = planoContaMetodo.ConsomeWS();
+                    strMensagem = planoContaMetodo.strMensagem;
+                    break;
+                case "tipo-operacao":
+                    TipoOperacaoMetodo tipoOperacaoMetodo = new TipoOperacaoMetodo();
+
+                    retornoInterface = tipoOperacaoMetodo.ConsomeWS();
+                    strMensagem = tipoOperacaoMetodo.strMensagem;
+                    break;
+                case "unidade-medida":
+                    UnidadeMedidaMetodo unidadeMedidaMetodo = new UnidadeMedidaMetodo();
+
+                    retornoInterface = unidadeMedidaMetodo.ConsomeWS();
+                    strMensagem = unidadeMedidaMetodo.strMensagem;
+                    break;
+                case "unidades-filial":
+                    UnidadesFiliaisMetodo unidadesFiliaisMetodo = new UnidadesFiliaisMetodo();
+
+                    retornoInterface = unidadesFiliaisMetodo.ConsomeWS();
+                    strMensagem = unidadesFiliaisMetodo.strMensagem;
+                    break;
+                case "usuarios":
+                    UsuarioMetodo usuarioMetodo = new UsuarioMetodo();
+
+                    retornoInterface = usuarioMetodo.ConsomeWS();
+                    strMensagem = usuarioMetodo.strMensagem;
+                    break;
+                case "unidades-usuarios":
+                    UsuarioUnidadeMetodo usuarioUnidadeMetodo = new UsuarioUnidadeMetodo();
+
+                    retornoInterface = usuarioUnidadeMetodo.ConsomeWS();
+                    strMensagem = usuarioUnidadeMetodo.strMensagem;
+                    break;
+                default:
+                    retornoInterface = false;
+                    strMensagem = $"Metodo {interfaceWS.ToLower()} não existe ou não está parametrizado";
+                    break;
+            }
+
+            // Retorno da Chamada da Interface
+            return new ObjectResult(new
+            {
+                Mensagem = strMensagem
+            })
+            { StatusCode = (retornoInterface ? 200 : 500) };
         }
     }
 }

@@ -37,9 +37,11 @@ namespace WebsupplyHHemo.Interface.Funcoes
                 switch (strNomeMaquina.ToString().ToUpper())
                 {
                     case "SRVWEB1":
+                    case "SRVWEB1N":
                         _strCodAmbiente = "PRD";
                         break;
                     case "SRVWEB2":
+                    case "SRVWEB2N":
                         _strCodAmbiente = "PRD";
                         break;
                     case "SRVWEBPREPRD":
