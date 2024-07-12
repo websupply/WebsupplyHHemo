@@ -102,6 +102,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         A2_CGC = DadosFornecedor.Rows[0]["A2_CGC"].ToString().Trim(),
                         A2_INSCR = DadosFornecedor.Rows[0]["A2_INSCR"].ToString().Trim(),
                         A2_END = DadosFornecedor.Rows[0]["A2_END"].ToString().Trim(),
+                        A2_COMPLEM = DadosFornecedor.Rows[0]["A2_COMPLEM"].ToString().Trim(),
                         A2_MUN = DadosFornecedor.Rows[0]["A2_MUN"].ToString().Trim(),
                         A2_EST = DadosFornecedor.Rows[0]["A2_EST"].ToString().Trim(),
                         A2_CEP = DadosFornecedor.Rows[0]["A2_CEP"].ToString().Trim(),

@@ -21,6 +21,7 @@ namespace WebsupplyHHemo.Interface.Model
         public string A2_CGC { get; set; }
         public string A2_INSCR { get; set; }
         public string A2_END { get; set; }
+        public string A2_COMPLEM { get; set; }
         public string A2_MUN { get; set; }
         public string A2_EST { get; set; }
         public string A2_CEP { get; set; }
