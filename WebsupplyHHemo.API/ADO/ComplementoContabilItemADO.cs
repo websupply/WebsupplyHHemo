@@ -9,6 +9,10 @@ namespace WebsupplyHHemo.API.ADO
 
         public bool ATUALIZA_DADOS_CONTABEIS_ITEM(string Connection, ComplementoContabilItemRequestDto objRequest)
         {
+            // Seta os Parametros Iniciais de Retorno
+            bool retorno = false;
+            strMensagem = $"Erro durante a Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}]";
+
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
             string NomeProcedure = "SP_HHemo_WS_Produtos_Precos_CCONTABIL_CLI_UPD";
@@ -18,24 +22,22 @@ namespace WebsupplyHHemo.API.ADO
             parametros.Add(new SqlParameter("@cCodProdutoCompleto", objRequest.CodProtheus));
             parametros.Add(new SqlParameter("@cCCONTABIL_CLI", objRequest.ContaContabil));
 
-            try
+            using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
             {
-                Conn.ExecutaComParametros(NomeProcedure, parametros);
-
-                Conn.Dispose();
-
-                strMensagem = $"Atualização Contábil do Item [{objRequest.CodProtheus}] para a Conta Contábil [{objRequest.ContaContabil}] Concluída com Sucesso";
-
-                return true;
+                while (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        strMensagem = $"Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}] com sucesso";
+                        retorno = true;
+                    }
+                    reader.NextResult();
+                }
             }
-            catch (Exception ex)
-            {
-                Conn.Dispose();
+            
+            Conn.Dispose();
 
-                strMensagem = ex.Message;
-
-                return false;
-            }
+            return retorno;
         }
     }
 }

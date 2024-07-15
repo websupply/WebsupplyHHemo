@@ -28,16 +28,17 @@ namespace WebsupplyHHemo.API.Controllers
             ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
             UserModel objUser = HelperClaims.CarregarUsuario(identity);
 
-            // Gera o Log de Operação
+            // Instancia o ADO do Log
             LogDeOperacaoModel objLog = new LogDeOperacaoModel();
 
+            // Instancia o ADO do Complemento Contabil do Item
             ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
 
             if (!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
             {
                 // Gera o Log de Operação
                 objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
-                objLog.cDetalhe = $"Erro durante a Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}] com sucesso";
+                objLog.cDetalhe = objADO.strMensagem;
                 objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
                 LogsADO.GERA_LOGDEOPERACAO(
@@ -55,7 +56,7 @@ namespace WebsupplyHHemo.API.Controllers
 
             // Gera o Log de Operação
             objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
-            objLog.cDetalhe = $"Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}] com sucesso";
+            objLog.cDetalhe = objADO.strMensagem;
             objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
             LogsADO.GERA_LOGDEOPERACAO(
