@@ -41,9 +41,9 @@ namespace WebsupplyHHemo.API.Controllers
             { StatusCode = 200 };
 
             // Instancia o ADO do Complemento Contabil do Item
-            ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
+            RecebimentoADO objADO = new RecebimentoADO();
 
-            if (!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
+            if (!objADO.ATUALIZA_RECEBIMENTO_FISCAL(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
             {
                 // Gera o Log de Operação
                 objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
