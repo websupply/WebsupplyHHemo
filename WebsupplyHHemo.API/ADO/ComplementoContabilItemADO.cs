@@ -20,7 +20,7 @@ namespace WebsupplyHHemo.API.ADO
 
             try
             {
-                Conn.ExecutaComParametrosSemRetorno(NomeProcedure, parametros);
+                Conn.ExecutaComParametros(NomeProcedure, parametros);
 
                 Conn.Dispose();
 

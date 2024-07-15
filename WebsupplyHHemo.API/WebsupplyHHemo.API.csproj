@@ -29,8 +29,4 @@
     <ProjectReference Include="..\WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>
