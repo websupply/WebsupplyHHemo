@@ -36,6 +36,12 @@ namespace WebsupplyHHemo.API.Controllers
             objLog.cDetalhe = $"Recebimento Fiscal do número [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}] realizado com sucesso. (Apenas mensagem de teste)"; ;
             objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
+            LogsADO.GERA_LOGDEOPERACAO(
+                    _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
+                    objUser,
+                    objLog
+                );
+
             return new ObjectResult(new
             {
                 Mensagem = "Requisição Realizada com sucesso"
