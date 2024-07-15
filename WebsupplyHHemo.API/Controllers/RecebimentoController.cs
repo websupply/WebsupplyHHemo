@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using WebsupplyHHemo.API.ADO;
 using WebsupplyHHemo.API.Dto;
-using WebsupplyHHemo.API.Helpers;
+using WebsupplyHHemo.API.ADO;
 using WebsupplyHHemo.API.Models;
+using WebsupplyHHemo.API.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebsupplyHHemo.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RecebimentoController : ControllerBase
     {
         private readonly IConfiguration _configuration;
