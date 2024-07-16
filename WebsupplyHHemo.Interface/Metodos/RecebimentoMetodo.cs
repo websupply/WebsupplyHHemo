@@ -23,7 +23,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
         // Paramêtros de Controle da Classe
         public int intCodRecComWebsupply = 0;
-        public string strCodLojaProtheus = string.Empty;
+        public int intCodNFWebsupply = 0;
         public string strFuncao = string.Empty; // Enviar - Cancelar
 
         private static int intNumTransacao
@@ -94,10 +94,11 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
-                DataTable DadosRecebimento = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar recebimento]", arrParam), ref arrOut).Tables[0];
+                DataTable DadosRecebimento = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Sel", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados
                 conn.Dispose();
@@ -123,6 +124,8 @@ namespace WebsupplyHHemo.Interface.Metodos
                         F1_TIPO = DadosRecebimento.Rows[0]["F1_TIPO"].ToString().Trim(),
                         F1_XML = DadosRecebimento.Rows[0]["F1_XML"].ToString().Trim(),
                         UUID_WEBSUPPLY = DadosRecebimento.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
+                        ANEXOS = new List<RecebimentoModel.Anexo>(),
+                        PRENOTA_ITENS = new List<RecebimentoModel.Item>()
                     };
 
                     // Realiza a Chamada do Banco
@@ -131,10 +134,11 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Cria o Parametro da query do banco
                     arrParam = new ArrayList();
 
-                    arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
-                    DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar itens do pedido]", arrParam), ref arrOut).Tables[0];
+                    DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Itens_Sel", arrParam), ref arrOut).Tables[0];
 
                     // Encerra a Conexão com Banco de Dados
                     conn.Dispose();
@@ -199,10 +203,11 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Cria o Parametro da query do banco
                     arrParam = new ArrayList();
 
-                    arrParam.Add(new Parametro("@iCL_CDG", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
-                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("[procedure para consultar anexos do pedido]", arrParam), ref arrOut).Tables[0];
+                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Aenxos_Sel", arrParam), ref arrOut).Tables[0];
 
                     // Encerra a Conexão com Banco de Dados
                     conn.Dispose();
@@ -315,7 +320,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         }
 
                         // Define a mensagem de sucesso
-                        strMensagem = $"Recebimento Nº {intCodRecComWebsupply} da loja [{(strCodLojaProtheus != String.Empty ? strCodLojaProtheus : recebimento.F1_LOJA)}] {(strFuncao.ToString().Trim() == "Enviar" ? "cadastrado(a)" : "atualizado(a)")} com sucesso.";
+                        strMensagem = $"Recebimento Nº {intCodRecComWebsupply} {(strFuncao.ToString().Trim() == "Enviar" ? "cadastrado(a)" : "atualizado(a)")} com sucesso.";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
