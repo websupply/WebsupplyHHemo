@@ -26,8 +26,12 @@ namespace WebsupplyHHemo.API.ADO
             {
                 while (reader.HasRows)
                 {
-                    strMensagem = $"Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}] com sucesso";
-                    retorno = true;
+                    while (reader.Read())
+                    {
+                        strMensagem = $"Atualização de Conta Contabil para o Produto com CodWebsupply [{objRequest.CodWebsupply}] atribuido ao CodProtheus [{objRequest.CodProtheus}] atualizando para a Conta Contabil [{objRequest.ContaContabil}] com sucesso";
+                        retorno = true;
+                    }
+                    reader.NextResult();
                 }
             }
             
