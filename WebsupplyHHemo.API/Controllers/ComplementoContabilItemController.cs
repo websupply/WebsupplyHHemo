@@ -28,6 +28,11 @@ namespace WebsupplyHHemo.API.Controllers
             ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
             UserModel objUser = HelperClaims.CarregarUsuario(identity);
 
+            // Limpa os espaços em branco
+            objRequest.CodWebsupply = objRequest.CodWebsupply.Trim();
+            objRequest.CodProtheus = objRequest.CodProtheus.Trim();
+            objRequest.ContaContabil = objRequest.ContaContabil.Trim();
+
             // Instancia o ADO do Log
             LogDeOperacaoModel objLog = new LogDeOperacaoModel();
 
