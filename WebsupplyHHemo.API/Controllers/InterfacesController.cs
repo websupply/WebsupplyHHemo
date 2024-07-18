@@ -30,11 +30,15 @@ namespace WebsupplyHHemo.API.Controllers
                 case "centro-custo":
                     CentroCustoMetodo centroCustoMetodo = new CentroCustoMetodo();
 
+                    centroCustoMetodo.strCodFilial = codFilial;
+
                     retornoInterface = centroCustoMetodo.ConsomeWS();
                     strMensagem = centroCustoMetodo.strMensagem;
                     break;
                 case "condicao-pagamento":
                     CondicaoPagtoMetodo condicaoPagtoMetodo = new CondicaoPagtoMetodo();
+
+                    condicaoPagtoMetodo.strCodFilial = codFilial;
 
                     retornoInterface = condicaoPagtoMetodo.ConsomeWS();
                     strMensagem = condicaoPagtoMetodo.strMensagem;
@@ -42,11 +46,15 @@ namespace WebsupplyHHemo.API.Controllers
                 case "forma-pagamento":
                     FormaPagtoMetodo formaPagtoMetodo = new FormaPagtoMetodo();
 
+                    formaPagtoMetodo.strCodFilial = codFilial;
+
                     retornoInterface = formaPagtoMetodo.ConsomeWS();
                     strMensagem = formaPagtoMetodo.strMensagem;
                     break;
                 case "natureza":
                     NaturezaMetodo naturezaMetodo = new NaturezaMetodo();
+
+                    naturezaMetodo.strCodFilial = codFilial;
 
                     retornoInterface = naturezaMetodo.ConsomeWS();
                     strMensagem = naturezaMetodo.strMensagem;
@@ -54,17 +62,23 @@ namespace WebsupplyHHemo.API.Controllers
                 case "plano-conta":
                     PlanoContaMetodo planoContaMetodo = new PlanoContaMetodo();
 
+                    planoContaMetodo.strCodFilial = codFilial;
+
                     retornoInterface = planoContaMetodo.ConsomeWS();
                     strMensagem = planoContaMetodo.strMensagem;
                     break;
                 case "tipo-operacao":
                     TipoOperacaoMetodo tipoOperacaoMetodo = new TipoOperacaoMetodo();
 
+                    tipoOperacaoMetodo.strCodFilial = codFilial;
+
                     retornoInterface = tipoOperacaoMetodo.ConsomeWS();
                     strMensagem = tipoOperacaoMetodo.strMensagem;
                     break;
                 case "unidade-medida":
                     UnidadeMedidaMetodo unidadeMedidaMetodo = new UnidadeMedidaMetodo();
+
+                    unidadeMedidaMetodo.strCodFilial = codFilial;
 
                     retornoInterface = unidadeMedidaMetodo.ConsomeWS();
                     strMensagem = unidadeMedidaMetodo.strMensagem;
