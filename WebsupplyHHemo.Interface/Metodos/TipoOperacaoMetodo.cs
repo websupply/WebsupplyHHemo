@@ -22,6 +22,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         string strIdentificador = "TipoOp" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
+        public string strCodFilial = string.Empty;
 
 
         private static int intNumTransacao
@@ -74,7 +75,11 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
+
+                arrParam.Add(new Parametro("@cCodFilial", strCodFilial, SqlDbType.VarChar, 500, ParameterDirection.Input));
+
                 ArrayList arrOut = new ArrayList();
+
                 DataTable DadosUnidade = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_CONSULTA_EMPRESAS_INTERFACE_SEL", arrParam), ref arrOut).Tables[0];
 
                 // Encerra a Conexão com Banco de Dados

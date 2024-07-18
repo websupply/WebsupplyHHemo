@@ -22,7 +22,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         string strIdentificador = "CCusto" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
-        public string intCodFilial = string.Empty;
+        public string strCodFilial = string.Empty;
 
 
         private static int intNumTransacao
@@ -76,7 +76,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Cria o Parametro da query do banco
                 ArrayList arrParam = new ArrayList();
 
-                arrParam.Add(new Parametro("@cCodFilial", intCodFilial, SqlDbType.VarChar, 500, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@cCodFilial", strCodFilial, SqlDbType.VarChar, 500, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
 

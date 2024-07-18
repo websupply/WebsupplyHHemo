@@ -49,7 +49,7 @@ namespace WebsupplyHHemo.Interface.Model
             public string D1_OPER { get; set; }
             public decimal D1_VALDESC { get; set; }
             public decimal D1_VUNIT { get; set; }
-            public int D1_QUANT { get; set; }
+            public decimal D1_QUANT { get; set; }
             public decimal D1_SEGURO { get; set; }
             public decimal D1_TOTAL { get; set; }
             public decimal D1_VALFRE { get; set; }
