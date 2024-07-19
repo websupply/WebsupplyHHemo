@@ -16,7 +16,7 @@ namespace WebsupplyHHemo.API.Controllers
         }
 
         [HttpGet]
-        [Route("consome-interface/{interfaceWS}/{codFilial}")]
+        [Route("consome-interface/{interfaceWS}/{codFilial?}")]
         public ObjectResult ConsomeInterface(string interfaceWS, string? codFilial)
         {
             // Variaveis de Controle
