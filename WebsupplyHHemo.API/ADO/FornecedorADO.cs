@@ -21,7 +21,7 @@ namespace WebsupplyHHemo.API.ADO
             parametros.Add(new SqlParameter("@cA2_COD", objRequest.A2_COD));
             parametros.Add(new SqlParameter("@cA2_LOJA", objRequest.A2_LOJA));
             parametros.Add(new SqlParameter("@cA2_CGC", objRequest.A2_CGC));
-            parametros.Add(new SqlParameter("@cA2_Justificativa", objRequest.A2_Justificativa));
+            parametros.Add(new SqlParameter("@vA2_Justificativa", objRequest.A2_Justificativa));
             parametros.Add(new SqlParameter("@cA2_MSBLQL", objRequest.A2_MSBLQL));
 
             using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
