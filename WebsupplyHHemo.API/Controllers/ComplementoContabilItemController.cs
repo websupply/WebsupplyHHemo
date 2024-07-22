@@ -5,6 +5,7 @@ using WebsupplyHHemo.API.Models;
 using WebsupplyHHemo.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using WebsupplyHHemo.Interface.Model;
 
 namespace WebsupplyHHemo.API.Controllers
 {
@@ -36,11 +37,31 @@ namespace WebsupplyHHemo.API.Controllers
             // Instancia o ADO do Log
             LogDeOperacaoModel objLog = new LogDeOperacaoModel();
 
-            // Instancia o ADO do Complemento Contabil do Item
-            ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
-
-            if (!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
+            try
             {
+                // Instancia o ADO do Complemento Contabil do Item
+                ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
+
+                if (!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
+                {
+                    // Gera o Log de Operação
+                    objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
+                    objLog.cDetalhe = objADO.strMensagem;
+                    objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                    LogsADO.GERA_LOGDEOPERACAO(
+                        _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
+                        objUser,
+                        objLog
+                    );
+
+                    return new ObjectResult(new
+                    {
+                        Mensagem = objADO.strMensagem
+                    })
+                    { StatusCode = 500 };
+                }
+
                 // Gera o Log de Operação
                 objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
                 objLog.cDetalhe = objADO.strMensagem;
@@ -56,25 +77,31 @@ namespace WebsupplyHHemo.API.Controllers
                 {
                     Mensagem = objADO.strMensagem
                 })
+                { StatusCode = 200 };
+            }
+            catch(Exception ex)
+            {
+                // Inicializa a Model de Excepetion
+                ExcepetionModel excepetionEstruturada = new ExcepetionModel(ex, true);
+
+                // Gera o Log de Operação
+                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Recebimento_Fiscal_Integracao");
+                objLog.cDetalhe = excepetionEstruturada.Mensagem;
+                objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+                LogsADO.GERA_LOGDEOPERACAO(
+                        _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
+                        objUser,
+                        objLog
+                    );
+
+                // Devolve o Erro
+                return new ObjectResult(new
+                {
+                    Mensagem = excepetionEstruturada.Mensagem
+                })
                 { StatusCode = 500 };
             }
-
-            // Gera o Log de Operação
-            objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
-            objLog.cDetalhe = objADO.strMensagem;
-            objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-            LogsADO.GERA_LOGDEOPERACAO(
-                _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
-                objUser,
-                objLog
-            );
-
-            return new ObjectResult(new
-            {
-                Mensagem = objADO.strMensagem
-            })
-            { StatusCode = 200 };
         }
     }
 }
