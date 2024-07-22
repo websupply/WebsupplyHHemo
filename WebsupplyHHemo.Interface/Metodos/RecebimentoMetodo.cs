@@ -207,7 +207,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
-                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Aenxos_Sel", arrParam), ref arrOut).Tables[0];
+                    DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Anexos_Sel", arrParam), ref arrOut).Tables[0];
 
                     // Encerra a Conexão com Banco de Dados
                     conn.Dispose();
