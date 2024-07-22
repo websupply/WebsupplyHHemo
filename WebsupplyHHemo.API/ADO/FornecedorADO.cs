@@ -15,7 +15,7 @@ namespace WebsupplyHHemo.API.ADO
 
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
-            string NomeProcedure = "[procedure aqui]";
+            string NomeProcedure = "SP_HHemo_WS_Liberacao_Fornecedor_UPD";
 
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@cA2_COD", objRequest.A2_COD));
