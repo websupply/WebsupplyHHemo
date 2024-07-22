@@ -22,23 +22,27 @@ namespace WebsupplyHHemo.Interface.Model
             // Define o StackTrace
             Rastreamento = new StackTrace(excecao, dadosArquivo);
 
+            // Define o Total de Frames
+            int Frames = Rastreamento.GetFrames().Count();
+            int FrameDetalhado = (Frames == 0 ? 0 : Frames - 1);
+
             // Pega a Linha da Excepetion
-            Linha = Rastreamento.GetFrame(0).GetFileLineNumber();
+            Linha = Rastreamento.GetFrame(FrameDetalhado).GetFileLineNumber();
 
             // Pega a Coluna da Excepetion
-            Coluna = Rastreamento.GetFrame(0).GetFileColumnNumber();
+            Coluna = Rastreamento.GetFrame(FrameDetalhado).GetFileColumnNumber();
 
             // Pega o Nome do Arquivo da Excepetion
-            Arquivo = Rastreamento.GetFrame(0).GetFileName();
+            Arquivo = Rastreamento.GetFrame(FrameDetalhado).GetFileName();
 
             // Pega a Função/Metodo que ocorreu a Excepetion
-            Funcao = Rastreamento.GetFrame(0).GetMethod().ToString();
+            Funcao = Rastreamento.GetFrame(FrameDetalhado).GetMethod().ToString();
 
             // Pega a Mensagem interna da Excepetion
             Descricao = excecao.Message;
 
             // Define a mensagem padrão da Excepetiond
-            Mensagem = $"Ocorreu a seguinte excepetion: {Descricao} em {Funcao} no arquivo {Arquivo} ({Linha}, {Coluna})";
+            Mensagem = $"---> Ocorreu a seguinte excepetion: \n{Descricao} em {Funcao} no arquivo {Arquivo} ({Linha}, {Coluna}).\n\n---> Excepetion Completa: \n{excecao.StackTrace}";
         }
     }
 }
