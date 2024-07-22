@@ -381,7 +381,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 1, -1, "", null, strMensagem,
+                                 1, -1, JsonConvert.SerializeObject(excepetionEstruturada), null, strMensagem,
                                  "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;

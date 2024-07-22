@@ -9,18 +9,18 @@ namespace WebsupplyHHemo.Interface.Model
 {
     public class ExcepetionModel
     {
-        public StackTrace Rastreamento { get; set; }
         public int Linha { get; set; }
         public int Coluna { get; set; }
         public string Descricao { get; set; }
         public string Arquivo { get; set; }
         public string Funcao { get; set; }
         public string Mensagem { get; set; }
+        public string MensagemCompleta { get; set; }
 
         public ExcepetionModel(Exception excecao, bool dadosArquivo)
         {
             // Define o StackTrace
-            Rastreamento = new StackTrace(excecao, dadosArquivo);
+            StackTrace Rastreamento = new StackTrace(excecao, dadosArquivo);
 
             // Define o Total de Frames
             int Frames = Rastreamento.GetFrames().Count();
@@ -42,7 +42,10 @@ namespace WebsupplyHHemo.Interface.Model
             Descricao = excecao.Message;
 
             // Define a mensagem padrão da Excepetiond
-            Mensagem = $"---> Ocorreu a seguinte excepetion: \n{Descricao} em {Funcao} no arquivo {Arquivo} ({Linha}, {Coluna}).\n\n---> Excepetion Completa: \n{excecao.StackTrace}";
+            Mensagem = $"---> Ocorreu a seguinte excepetion: \n{Descricao} em {Funcao} no arquivo {Arquivo} ({Linha}, {Coluna}).";
+
+            // Define a mensagem completa
+            MensagemCompleta = $"---> Excepetion Completa: \n{excecao.StackTrace}";
         }
     }
 }

@@ -323,18 +323,18 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
             catch (Exception ex)
             {
+                // Inicializa a Model de Excepetion
+                ExcepetionModel excepetionEstruturada = new ExcepetionModel(ex, true);
+
                 // Estrutura o Erro
-                strMensagem = ex.Message;
+                strMensagem = excepetionEstruturada.Mensagem;
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                 1, -1, "", null, strMensagem,
+                                 1, -1, JsonConvert.SerializeObject(excepetionEstruturada), null, strMensagem,
                                  "L", intCodForWebsupply.ToString(), "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
-
-                // Retorna Falso
-                return false;
             }
         }
     }
