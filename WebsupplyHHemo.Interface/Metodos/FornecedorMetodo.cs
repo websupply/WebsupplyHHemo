@@ -335,6 +335,9 @@ namespace WebsupplyHHemo.Interface.Metodos
                                  "L", intCodForWebsupply.ToString(), "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
+
+                // Retorna Falso
+                return false;
             }
         }
     }
