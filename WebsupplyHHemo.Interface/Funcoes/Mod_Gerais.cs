@@ -181,5 +181,21 @@ namespace WebsupplyHHemo.Interface.Funcoes
             }
             return isValid;
         }
+
+        public static string ConsultaParametroConfig(string parametro)
+        {
+            AssemblySettings settings = new AssemblySettings();
+
+            return settings[parametro].ToString();
+        }
+
+        public static string ArquivoParaBase64(string pathArquivo)
+        {
+            // Realiza a leitura do Arquivo
+            Byte[] bytes = File.ReadAllBytes(pathArquivo);
+
+            // Devole o base64
+            return Convert.ToBase64String(bytes);
+        }
     }
 }

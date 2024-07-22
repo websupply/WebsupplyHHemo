@@ -73,6 +73,7 @@
     <Compile Include="Metodos\UsuarioUnidadeMetodo.cs" />
     <Compile Include="Model\CentroCustoModel.cs" />
     <Compile Include="Model\CondicaoPagtoModel.cs" />
+    <Compile Include="Model\ExcepetionModel.cs" />
     <Compile Include="Model\FormaPagtoModel.cs" />
     <Compile Include="Model\FornecedorModel.cs" />
     <Compile Include="Model\GruposItensModel.cs" />

@@ -10,6 +10,7 @@ using WebsupplyHHemo.Interface.Model;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using System.Diagnostics;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
@@ -225,9 +226,17 @@ namespace WebsupplyHHemo.Interface.Metodos
                             RecebimentoModel.Anexo anexo = new RecebimentoModel.Anexo
                             {
                                 ID_DOC = registro["ID_DOC"].ToString().Trim(),
-                                DOC = registro["DOC"].ToString().Trim(),
-                                DOCX64 = registro["DOCX64"].ToString().Trim(),
+                                DOC = registro["DOC"].ToString().Trim()
                             };
+
+                            // Consulta o Caminho Base dos Arquivos
+                            string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
+
+                            // Define o caminho completo do arquivo
+                            string pathCompleto = pathBase + $@"\Arquivos\recebimentos\{intCodRecComWebsupply}\{anexo.DOC}";
+
+                            // Adiciona o Base64 ao objeto Anexo
+                            anexo.DOCX64 = Mod_Gerais.ArquivoParaBase64(pathCompleto);
 
                             // Adiciona a Array de Itens
                             recebimento.ANEXOS.Add(anexo);
@@ -364,8 +373,11 @@ namespace WebsupplyHHemo.Interface.Metodos
             }
             catch (Exception ex)
             {
+                // Inicializa a Model de Excepetion
+                ExcepetionModel excepetionEstruturada = new ExcepetionModel(ex, true);
+
                 // Estrutura o Erro
-                strMensagem = ex.Message;
+                strMensagem = excepetionEstruturada.Mensagem;
 
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
