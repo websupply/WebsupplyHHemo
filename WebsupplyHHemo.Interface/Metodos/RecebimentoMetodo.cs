@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Diagnostics;
+using static WebsupplyHHemo.Interface.Model.RecebimentoModel;
 
 namespace WebsupplyHHemo.Interface.Metodos
 {
@@ -177,7 +178,43 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 D1_VALIPI = Decimal.Parse(registro["D1_VALIPI"].ToString().Trim()),
                                 D1_VLDESC = Decimal.Parse(registro["D1_VLDESC"].ToString().Trim()),
                                 D1_MSBLQL = registro["D1_MSBLQL"].ToString().Trim(),
+                                ID_ITEMP = int.Parse(registro["ID_ITEMP"].ToString().Trim()),
+                                Tipo = registro["Tipo"].ToString().Trim(),
+                                LOTES = new List<Lote>()
                             };
+
+                            // Consulta os Lotes do Item
+                            arrParam = new ArrayList();
+
+                            arrParam.Add(new Parametro("@CDGPED", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@ID_ITEMP", item.ID_ITEMP, SqlDbType.Int, 4, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@cTipo", item.Tipo, SqlDbType.Char, 2, ParameterDirection.Input));
+
+                            arrOut = new ArrayList();
+                            DataTable DadosLote = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_RECEBIMENTO_CONTROLE_SEL", arrParam), ref arrOut).Tables[0];
+
+                            // Verifica se Existe Lotes do item para o pedido e caso sim, traz
+                            // os lotes do item
+                            if (DadosLote.Rows.Count > 0)
+                            {
+                                for (int j = 0; j < DadosLote.Rows.Count; j++)
+                                {
+                                    // Pega a Linha do Registro
+                                    var registro2 = DadosItens.Rows[i];
+
+                                    // Instância o Lote
+                                    RecebimentoModel.Lote lote = new RecebimentoModel.Lote
+                                    {
+                                        LOTE_SERIE = registro2["LOTE_SERIE"].ToString().Trim(),
+                                        QUANT = Decimal.Parse(registro2["QUANT"].ToString().Trim()),
+                                        DATA_VALIDADE = DateTime.Parse(registro2["DATA_VALIDADE"].ToString().Trim()),
+                                    };
+
+                                    // Adiciona o Lote a listagem de lotes do item
+                                    item.LOTES.Add(lote);
+                                }
+                            }
 
                             // Adiciona a Array de Itens
                             recebimento.PRENOTA_ITENS.Add(item);

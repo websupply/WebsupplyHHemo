@@ -64,6 +64,8 @@ namespace WebsupplyHHemo.Interface.Model
             public decimal D1_VALIPI { get; set; }
             public decimal D1_VLDESC { get; set; }
             public string D1_MSBLQL { get; set; }
+            public string Tipo { get; set; }
+            public int ID_ITEMP { get; set; }
             public List<Lote> LOTES { get; set; }
         }
     }
