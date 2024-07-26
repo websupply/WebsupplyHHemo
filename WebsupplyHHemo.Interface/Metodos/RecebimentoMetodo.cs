@@ -211,7 +211,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     {
                                         LOTE_SERIE = registro2["LOTE_SERIE"].ToString().Trim(),
                                         QUANT = Decimal.Parse(registro2["QUANT"].ToString().Trim()),
-                                        DATA_VALIDADE = DateTime.Parse(registro2["DATA_VALIDADE"].ToString().Trim()),
+                                        DATA_VALIDADE = registro2["DATA_VALIDADE"].ToString().Trim(),
                                     };
 
                                     // Adiciona o Lote a listagem de lotes do item

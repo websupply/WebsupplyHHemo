@@ -38,7 +38,7 @@ namespace WebsupplyHHemo.Interface.Model
         {
             public string LOTE_SERIE { get; set; }
             public decimal QUANT { get; set; }
-            public DateTime DATA_VALIDADE { get; set; }
+            public string DATA_VALIDADE { get; set; }
         }
 
         public class Item

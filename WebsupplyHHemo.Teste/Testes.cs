@@ -95,8 +95,8 @@ namespace WebsupplyHHemo.Teste
         {
             RecebimentoMetodo recebimentoMetodo = new RecebimentoMetodo();
 
-            recebimentoMetodo.intCodRecComWebsupply = 664527;
-            recebimentoMetodo.intCodNFWebsupply = 12121212;
+            recebimentoMetodo.intCodRecComWebsupply = 2362135;
+            recebimentoMetodo.intCodNFWebsupply = 12345;
             recebimentoMetodo.strFuncao = "Enviar";
 
             Console.WriteLine($"Retorno: {recebimentoMetodo.ConsomeWS()}");
