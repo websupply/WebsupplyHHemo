@@ -15,18 +15,21 @@ namespace WebsupplyHHemo.API.ADO
 
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
-            string NomeProcedure = "SP_HHemo_WS_Produtos_Precos_CCONTABIL_CLI_UPD";
+            string NomeProcedure = "SP_HHemo_WS_Recebimento_Fiscal_InsUPD";
 
             List<SqlParameter> parametros = new List<SqlParameter>();
-            //parametros.Add(new SqlParameter("@cCodProd", objRequest.CodWebsupply));
-            //parametros.Add(new SqlParameter("@cCodProdutoCompleto", objRequest.CodProtheus));
-            //parametros.Add(new SqlParameter("@cCCONTABIL_CLI", objRequest.ContaContabil));
+            parametros.Add(new SqlParameter("@iNumPedido", objRequest.NumPedido));
+            parametros.Add(new SqlParameter("@iNumNF", objRequest.NumDoc));
+            parametros.Add(new SqlParameter("@vSERIE", objRequest.Serie));
+            parametros.Add(new SqlParameter("@vCodFornecedor", objRequest.CodFornecedor));
+            parametros.Add(new SqlParameter("@vCnpjFornecedor", objRequest.CnpjFornecedor));
+            parametros.Add(new SqlParameter("@cStatus", objRequest.Status));
 
             using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
             {
                 while (reader.HasRows)
                 {
-                    strMensagem = $"Recebimento Fiscal do número [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}] realizado com sucesso";
+                    strMensagem = $"Recebimento Fiscal da Nota Nº [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}] realizado com sucesso";
                     retorno = true;
                 }
             }

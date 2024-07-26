@@ -42,30 +42,13 @@ namespace WebsupplyHHemo.API.Controllers
 
             try
             {
-                // Gera o Log de Operação
-                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Recebimento_Fiscal_Integracao");
-                objLog.cDetalhe = $"Recebimento Fiscal do número [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}] realizado com sucesso. (Apenas mensagem de teste)";
-                objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-                LogsADO.GERA_LOGDEOPERACAO(
-                        _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
-                        objUser,
-                        objLog
-                    );
-
-                return new ObjectResult(new
-                {
-                    Mensagem = "Requisição Realizada com sucesso"
-                })
-                { StatusCode = 200 };
-
                 // Instancia o ADO do Complemento Contabil do Item
                 RecebimentoADO objADO = new RecebimentoADO();
 
                 if (!objADO.ATUALIZA_RECEBIMENTO_FISCAL(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
                 {
                     // Gera o Log de Operação
-                    objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
+                    objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Recebimento_Fiscal_Integracao");
                     objLog.cDetalhe = objADO.strMensagem;
                     objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
@@ -83,7 +66,7 @@ namespace WebsupplyHHemo.API.Controllers
                 }
 
                 // Gera o Log de Operação
-                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
+                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Recebimento_Fiscal_Integracao");
                 objLog.cDetalhe = objADO.strMensagem;
                 objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
