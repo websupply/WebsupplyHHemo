@@ -229,15 +229,6 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 DOC = registro["DOC"].ToString().Trim()
                             };
 
-                            // Consulta o Caminho Base dos Arquivos
-                            string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
-
-                            // Define o caminho completo do arquivo
-                            string pathCompleto = pathBase + $@"\Arquivos\recebimentos\{intCodRecComWebsupply}\{anexo.DOC}";
-
-                            // Adiciona o Base64 ao objeto Anexo
-                            anexo.DOCX64 = Mod_Gerais.ArquivoParaBase64(pathCompleto);
-
                             // Adiciona a Array de Itens
                             recebimento.ANEXOS.Add(anexo);
                         }
@@ -249,9 +240,19 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Atualiza o Identificador
                     strIdentificador = (strFuncao.ToString().Trim() == "Enviar" ? "Cad" : "Exc") + strIdentificador;
 
+                    // Remove todos os Base64 para gerar o Log
+                    for(int i = 0; i < recebimento.ANEXOS.Count; i++)
+                    {
+                        // Pega o Registro
+                        RecebimentoModel.Anexo anexo = recebimento.ANEXOS[i];
+
+                        // Retira o Base64
+                        anexo.DOCX64 = string.Empty;
+                    }
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
-                                     0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(recebimento), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
