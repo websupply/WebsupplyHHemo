@@ -34,6 +34,13 @@ namespace WebsupplyHHemo.Interface.Model
             public string DOCX64 { get; set; }
         }
 
+        public class Lote
+        {
+            public string LOTE_SERIE { get; set; }
+            public decimal QUANT { get; set; }
+            public DateTime DATA_VALIDADE { get; set; }
+        }
+
         public class Item
         {
             public string D1_CC { get; set; }
@@ -57,6 +64,7 @@ namespace WebsupplyHHemo.Interface.Model
             public decimal D1_VALIPI { get; set; }
             public decimal D1_VLDESC { get; set; }
             public string D1_MSBLQL { get; set; }
+            public List<Lote> LOTES { get; set; }
         }
     }
 }
