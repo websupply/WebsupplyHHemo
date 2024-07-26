@@ -183,6 +183,9 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 LOTES = new List<Lote>()
                             };
 
+                            // Realiza a Chamada do Banco
+                            conn = new Conexao(Mod_Gerais.ConnectionString());
+
                             // Consulta os Lotes do Item
                             arrParam = new ArrayList();
 
@@ -201,7 +204,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 for (int j = 0; j < DadosLote.Rows.Count; j++)
                                 {
                                     // Pega a Linha do Registro
-                                    var registro2 = DadosItens.Rows[i];
+                                    var registro2 = DadosLote.Rows[j];
 
                                     // Instância o Lote
                                     RecebimentoModel.Lote lote = new RecebimentoModel.Lote
