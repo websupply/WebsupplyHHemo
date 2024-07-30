@@ -103,6 +103,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         C7_SEGURO_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_SEGURO_TOTAL"].ToString().Trim()),
                         C7_VALFRE_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_VALFRE_TOTAL"].ToString().Trim()),
                         C7_VLDESC_TOTAL = Decimal.Parse(DadosPedidoCompra.Rows[0]["C7_VLDESC_TOTAL"].ToString().Trim()),
+                        C7_TPFRETE = DadosPedidoCompra.Rows[0]["C7_TPFRETE"].ToString().Trim(),
                         PEDIDO_ITENS = new List<PedidoCompraModel.Item>(),
                         ANEXOS = new List<PedidoCompraModel.Anexo>()
                     };

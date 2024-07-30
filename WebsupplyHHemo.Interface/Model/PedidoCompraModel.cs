@@ -22,6 +22,7 @@ namespace WebsupplyHHemo.Interface.Model
         public decimal C7_SEGURO_TOTAL { get; set; }
         public decimal C7_VALFRE_TOTAL { get; set; }
         public decimal C7_VLDESC_TOTAL { get; set; }
+        public string C7_TPFRETE { get; set; }
         public string C7_MSBLQL { get; set; }
         public List<Anexo> ANEXOS { get; set; }
         public List<Item> PEDIDO_ITENS { get; set; }
