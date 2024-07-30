@@ -11,7 +11,7 @@ namespace WebsupplyHHemo.API.ADO
         {
             // Seta os Parametros Iniciais de Retorno
             bool retorno = false;
-            strMensagem = $"Erro durante a realização do Recebimento Fiscal do número [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}]";
+            strMensagem = $"Erro durante a realização do Recebimento Fiscal. Parametros Enviados - NumDoc: [{objRequest.NumDoc}], NumPedido: [{objRequest.NumPedido}], Serie: [{objRequest.Serie}], CodFornecedor: [{objRequest.CodFornecedor}], CnpjFornecedor: [{objRequest.CnpjFornecedor}] e Status: [{objRequest.Status}]";
 
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
