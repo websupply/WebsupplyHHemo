@@ -9,10 +9,6 @@ namespace WebsupplyHHemo.API.ADO
 
         public bool ATUALIZA_STATUS_FORNECEDOR(string Connection, FornecedorRequestDto objRequest)
         {
-            // Seta os Parametros Iniciais de Retorno
-            bool retorno = false;
-            strMensagem = $"Erro durante a Atualização de Status do Fornecedor com A2_COD [{objRequest.A2_COD}] referente a A2_LOJA [{objRequest.A2_LOJA}] do A2_CGC [{objRequest.A2_CGC}] para o Status - A2_MSBLQL [{objRequest.A2_MSBLQL}]";
-
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
             string NomeProcedure = "SP_HHemo_WS_Liberacao_Fornecedor_UPD";
@@ -24,18 +20,24 @@ namespace WebsupplyHHemo.API.ADO
             parametros.Add(new SqlParameter("@vA2_Justificativa", objRequest.A2_Justificativa));
             parametros.Add(new SqlParameter("@cA2_MSBLQL", objRequest.A2_MSBLQL));
 
-            using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
+            try
             {
-                if (reader.HasRows)
-                {
-                    strMensagem = $"Atualização de Status do Fornecedor com A2_COD [{objRequest.A2_COD}] referente a A2_LOJA [{objRequest.A2_LOJA}] do A2_CGC [{objRequest.A2_CGC}] para o Status - A2_MSBLQL [{objRequest.A2_MSBLQL}] com sucesso";
-                    retorno = true;
-                }
+                Conn.ExecutaComParametrosSemRetorno(NomeProcedure, parametros);
+
+                Conn.Dispose();
+
+                strMensagem = $"Atualização de Status do Fornecedor Realizada com Sucesso. Parametros Enviados - A2_COD: [{objRequest.A2_COD}], A2_LOJA: [{objRequest.A2_LOJA}], A2_CGC: [{objRequest.A2_CGC}], A2_Justificativa: [{objRequest.A2_Justificativa}], A2_MSBLQL: [{objRequest.A2_MSBLQL}]";
+
+                return true;
             }
+            catch (Exception ex)
+            {
+                Conn.Dispose();
 
-            Conn.Dispose();
+                strMensagem = $"Erro durante a Atualização de Status do Fornecedor. Parametros Enviados - A2_COD: [{objRequest.A2_COD}], A2_LOJA: [{objRequest.A2_LOJA}], A2_CGC: [{objRequest.A2_CGC}], A2_Justificativa: [{objRequest.A2_Justificativa}], A2_MSBLQL: [{objRequest.A2_MSBLQL}]";
 
-            return retorno;
+                return false;
+            }
         }
     }
 }
