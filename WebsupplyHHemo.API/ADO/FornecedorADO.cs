@@ -26,7 +26,7 @@ namespace WebsupplyHHemo.API.ADO
 
             using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
             {
-                while (reader.HasRows)
+                if (reader.HasRows)
                 {
                     strMensagem = $"Atualização de Status do Fornecedor com A2_COD [{objRequest.A2_COD}] referente a A2_LOJA [{objRequest.A2_LOJA}] do A2_CGC [{objRequest.A2_CGC}] para o Status - A2_MSBLQL [{objRequest.A2_MSBLQL}] com sucesso";
                     retorno = true;

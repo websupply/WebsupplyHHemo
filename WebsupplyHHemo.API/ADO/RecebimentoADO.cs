@@ -27,7 +27,7 @@ namespace WebsupplyHHemo.API.ADO
 
             using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
             {
-                while (reader.HasRows)
+                if (reader.HasRows)
                 {
                     strMensagem = $"Recebimento Fiscal da Nota Nº [{objRequest.NumDoc}] referente ao pedido [{objRequest.NumPedido}] realizado com sucesso";
                     retorno = true;
