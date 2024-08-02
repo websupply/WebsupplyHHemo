@@ -11,7 +11,7 @@ namespace WebsupplyHHemo.API.ADO
 
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
-            string NomeProcedure = "SP_MDS_LOGINS_SEL";
+            string NomeProcedure = "SP_HHEMO_LOGINS_SEL";
 
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@cLogin", Login));
@@ -46,7 +46,7 @@ namespace WebsupplyHHemo.API.ADO
         {
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
-            string NomeProcedure = "SP_MDS_LOGINS_TENTATIVAS_UPD";
+            string NomeProcedure = "SP_HHEMO_LOGINS_TENTATIVAS_UPD";
 
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@cLogin", Login));
@@ -75,7 +75,7 @@ namespace WebsupplyHHemo.API.ADO
         {
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
-            string NomeProcedure = "SP_MDS_LOGINS_DESTRAVA";
+            string NomeProcedure = "SP_HHEMO_LOGINS_DESTRAVA";
 
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("@cLogin", Login));
