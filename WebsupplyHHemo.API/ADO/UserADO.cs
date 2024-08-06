@@ -25,6 +25,7 @@ namespace WebsupplyHHemo.API.ADO
                 {
                     while (reader.Read())
                     {
+                        objUser.LOGIN = Login;
                         objUser.CGC = String.IsNullOrEmpty(reader["CGC"].ToString()) ? "" : reader["CGC"].ToString().Trim();
                         objUser.CCUSTO = String.IsNullOrEmpty(reader["CCUSTO"].ToString()) ? "" : reader["CCUSTO"].ToString().Trim();
                         objUser.REQUISIT = String.IsNullOrEmpty(reader["REQUISIT"].ToString()) ? "" : reader["REQUISIT"].ToString().Trim();
