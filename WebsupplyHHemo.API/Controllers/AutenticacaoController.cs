@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using WebsupplyHHemo.API.ADO;
+using WebsupplyHHemo.API.Attributes;
 using WebsupplyHHemo.API.Models;
 using WebsupplyHHemo.Interface.Funcoes;
 using WebsupplyHHemo.Interface.Model;
@@ -30,18 +31,24 @@ namespace WebsupplyHHemo.API.Controllers
 
         [HttpPost]
         [Route("login")]
+        [Servico(16)]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            // Seta os parametros inicias do Log
-            _transacao = 0;
-            _servico = 16;
-            _identificador = "Login" + Mod_Gerais.RetornaIdentificador();
-            
             // Instancia o obj do Log
             Class_Log_Hhemo objLog;
 
             try
             {
+                // Pega o Atributo de Serviço
+                var servicoAttribute = (ServicoAttribute)Attribute.GetCustomAttribute(
+                    typeof(AutenticacaoController).GetMethod(nameof(Login)),
+                    typeof(ServicoAttribute));
+
+                // Seta os parametros inicias do Log
+                _transacao = 0;
+                _servico = servicoAttribute.IDServico;
+                _identificador = "Login" + Mod_Gerais.RetornaIdentificador();
+
                 // Gera Log
                 objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
                                  0, 0, JsonConvert.SerializeObject(model), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
@@ -142,18 +149,24 @@ namespace WebsupplyHHemo.API.Controllers
 
         [HttpPost]
         [Route("refresh-token")]
+        [Servico(17)]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
         {
-            // Seta os parametros inicias do Log
-            _transacao = 0;
-            _servico = 17;
-            _identificador = "Refresh" + Mod_Gerais.RetornaIdentificador();
-
             // Instancia o obj do Log
             Class_Log_Hhemo objLog;
 
             try
             {
+                // Pega o Atributo de Serviço
+                var servicoAttribute = (ServicoAttribute)Attribute.GetCustomAttribute(
+                    typeof(AutenticacaoController).GetMethod(nameof(RefreshToken)),
+                    typeof(ServicoAttribute));
+
+                // Seta os parametros inicias do Log
+                _transacao = 0;
+                _servico = servicoAttribute.IDServico;
+                _identificador = "Refresh" + Mod_Gerais.RetornaIdentificador();
+
                 // Gera Log
                 objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
                                  0, 0, JsonConvert.SerializeObject(tokenModel), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
