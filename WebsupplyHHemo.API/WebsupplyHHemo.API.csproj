@@ -29,4 +29,13 @@
     <ProjectReference Include="..\WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="SgiConnection">
+      <HintPath>D:\Componentes_DOTNET\SGIComponentes\SgiConnection.dll</HintPath>
+    </Reference>
+    <Reference Include="WSComuns">
+      <HintPath>D:\Componentes_DOTNET\SGIComponentes\WSComuns.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

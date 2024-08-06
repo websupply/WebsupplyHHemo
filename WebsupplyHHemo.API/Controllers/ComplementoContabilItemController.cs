@@ -6,6 +6,7 @@ using WebsupplyHHemo.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using WebsupplyHHemo.Interface.Model;
+using WebsupplyHHemo.Interface.Funcoes;
 
 namespace WebsupplyHHemo.API.Controllers
 {
