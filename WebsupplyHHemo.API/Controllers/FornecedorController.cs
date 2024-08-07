@@ -55,7 +55,7 @@ namespace WebsupplyHHemo.API.Controllers
             {
                 // Pega o Atributo de Serviço
                 var servicoAttribute = (ServicoAttribute)Attribute.GetCustomAttribute(
-                    typeof(AutenticacaoController).GetMethod(nameof(AtualizaStatus)),
+                    typeof(FornecedorController).GetMethod(nameof(AtualizaStatus)),
                     typeof(ServicoAttribute));
 
                 // Seta os parametros inicias do Log
