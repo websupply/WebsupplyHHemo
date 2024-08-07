@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
     {
         options.Filters.Add<ResourceFilters>();
+        options.Filters.Add<ResultFilters>();
     })
     .AddJsonOptions(options =>
     {

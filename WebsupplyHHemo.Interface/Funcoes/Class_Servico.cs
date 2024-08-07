@@ -51,7 +51,7 @@ namespace WebsupplyHHemo.Interface.Funcoes
                         _strCodAmbiente = "HOM";
                         break;
                     default:
-                        _strCodAmbiente = "DEV";
+                        _strCodAmbiente = "PRD";
                         break;
                 }
                 // if (strNomeMaquina.ToString().ToUpper() == "SRVWEB1" ||
