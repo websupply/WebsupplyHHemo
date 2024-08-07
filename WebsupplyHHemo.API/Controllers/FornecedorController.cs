@@ -37,6 +37,9 @@ namespace WebsupplyHHemo.API.Controllers
             // Instancia o obj do Log
             Class_Log_Hhemo objLog;
 
+            // Instancia a Model de Log
+            LogWebService logWebService;
+
             // Pega a Claims
             ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
             UserModel objUser = HelperClaims.CarregarUsuario(identity);
@@ -72,30 +75,44 @@ namespace WebsupplyHHemo.API.Controllers
 
                 if (!objADO.ATUALIZA_STATUS_FORNECEDOR(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
                 {
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = objADO.strMensagem,
+                        Retorno = objRequest
+                    };
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                     0, 0, JsonConvert.SerializeObject(objADO), null, "Erro na Chamada da API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "Erro na Chamada da API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
                     return new ObjectResult(new
                     {
-                        Mensagem = objADO.strMensagem
+                        Mensagem = logWebService.Mensagem
                     })
                     { StatusCode = 500 };
                 }
 
+                // Instancia a model do Log
+                logWebService = new LogWebService()
+                {
+                    Mensagem = objADO.strMensagem,
+                    Retorno = objRequest
+                };
+
                 // Gera Log
                 objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                 0, 0, JsonConvert.SerializeObject(objADO), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, JsonConvert.SerializeObject(logWebService), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
                 return new ObjectResult(new
                 {
-                    Mensagem = objADO.strMensagem
+                    Mensagem = logWebService.Mensagem
                 })
                 { StatusCode = 200 };
             }

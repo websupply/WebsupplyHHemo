@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebsupplyHHemo.API.Attributes;
 using WebsupplyHHemo.API.Dto;
+using WebsupplyHHemo.API.Models;
 using WebsupplyHHemo.Interface.Metodos;
+using WebsupplyHHemo.Interface.Funcoes;
+using Newtonsoft.Json;
 
 namespace WebsupplyHHemo.API.Controllers
 {
@@ -9,16 +13,56 @@ namespace WebsupplyHHemo.API.Controllers
     public class InterfacesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly string _ambiente;
+        private static int _transacao;
+        private static int _servico;
+        private static string _identificador;
 
         public InterfacesController(IConfiguration configuration)
         {
             _configuration = configuration;
+            _ambiente = _configuration.GetValue<string>("Parametros:Ambiente");
         }
 
         [HttpGet]
         [Route("consome-interface/{interfaceWS}/{codFilial?}")]
+        [Servico(21)]
         public ObjectResult ConsomeInterface(string interfaceWS, string? codFilial)
         {
+            // Instancia o obj do Log
+            Class_Log_Hhemo objLog;
+
+            // Instancia a Model de Log
+            LogWebService logWebService;
+
+            // Pega o Atributo de Serviço
+            var servicoAttribute = (ServicoAttribute)Attribute.GetCustomAttribute(
+                typeof(AutenticacaoController).GetMethod(nameof(ConsomeInterface)),
+                typeof(ServicoAttribute));
+
+            // Seta os parametros inicias do Log
+            _transacao = 0;
+            _servico = servicoAttribute.IDServico;
+            _identificador = "ConsomeInterface" + Mod_Gerais.RetornaIdentificador();
+
+            // Instancia a model do Log
+            logWebService = new LogWebService()
+            {
+                Mensagem = "Chamada da API de Consumo de Interfaces iniciada",
+                Retorno = new
+                {
+                    interfaceWS = interfaceWS,
+                    codFilial = codFilial
+                }
+            };
+
+            // Gera Log
+            objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                             0, 0, JsonConvert.SerializeObject(logWebService), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                             "L", "", "", Mod_Gerais.MethodName());
+            objLog.GravaLog();
+            objLog = null;
+
             // Variaveis de Controle
             string strMensagem = string.Empty;
             bool retornoInterface = false;
@@ -106,6 +150,26 @@ namespace WebsupplyHHemo.API.Controllers
                     strMensagem = $"Metodo {interfaceWS.ToLower()} não existe ou não está parametrizado";
                     break;
             }
+
+            // Instancia a model do Log
+            logWebService = new LogWebService()
+            {
+                Mensagem = "Chamada da API de Consumo de Interfaces Finalizada com sucesso.",
+                Retorno = new
+                {
+                    interfaceWS = interfaceWS,
+                    codFilial = codFilial,
+                    status = retornoInterface,
+                    mensagem = strMensagem
+                }
+            };
+
+            // Gera Log
+            objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                             0, 0, JsonConvert.SerializeObject(logWebService), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                             "L", "", "", Mod_Gerais.MethodName());
+            objLog.GravaLog();
+            objLog = null;
 
             // Retorno da Chamada da Interface
             return new ObjectResult(new

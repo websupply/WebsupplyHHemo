@@ -37,6 +37,9 @@ namespace WebsupplyHHemo.API.Controllers
             // Instancia o obj do Log
             Class_Log_Hhemo objLog;
 
+            // Instancia a Model de Log
+            LogWebService logWebService;
+
             try
             {
                 // Pega o Atributo de Serviço
@@ -65,9 +68,23 @@ namespace WebsupplyHHemo.API.Controllers
                 // Verifica se as tentativas não foram excedidas
                 if (numTentativas >= 5)
                 {
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = "Usuário bloqueado por excesso de Tentativas.",
+                        Retorno = objUser
+                    };
+
+                    // Gera Log
+                    objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "Erro na Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
+
                     return Unauthorized(new
                     {
-                        Mensagem = "Usuário bloqueado por excesso de Tentativas."
+                        Mensagem = logWebService.Mensagem
                     });
                 }
 
@@ -99,9 +116,16 @@ namespace WebsupplyHHemo.API.Controllers
 
                     TokenADO.TOKEN_INSUPD(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser);
 
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = "Autenticação realizada com sucesso",
+                        Retorno = objUser
+                    };
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                     0, 0, JsonConvert.SerializeObject(objUser), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
@@ -113,16 +137,23 @@ namespace WebsupplyHHemo.API.Controllers
                     });
                 }
 
+                // Instancia a model do Log
+                logWebService = new LogWebService()
+                {
+                    Mensagem = "Dados de acesso incorreto ou usuário não existe na base de dados.",
+                    Retorno = objUser
+                };
+
                 // Gera Log
                 objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                 0, 0, JsonConvert.SerializeObject(objUser), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, JsonConvert.SerializeObject(logWebService), null, "Erro na Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
                 return Unauthorized(new
                 {
-                    Mensagem = "Dados de acesso incorreto ou usuário não existe na base de dados."
+                    Mensagem = logWebService.Mensagem
                 });
             }
             catch (Exception ex)
@@ -155,6 +186,9 @@ namespace WebsupplyHHemo.API.Controllers
             // Instancia o obj do Log
             Class_Log_Hhemo objLog;
 
+            // Instancia a Model de Log
+            LogWebService logWebService;
+
             try
             {
                 // Pega o Atributo de Serviço
@@ -176,14 +210,21 @@ namespace WebsupplyHHemo.API.Controllers
 
                 if (tokenModel is null)
                 {
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = "Requisição inválida do cliente",
+                        Retorno = tokenModel
+                    };
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                     0, 0, JsonConvert.SerializeObject(tokenModel), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "Erro na Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
-                    return BadRequest("Invalid client request");
+                    return BadRequest(logWebService.Mensagem);
                 }
 
                 string? accessToken = tokenModel.AccessToken;
@@ -192,14 +233,21 @@ namespace WebsupplyHHemo.API.Controllers
                 var principal = GetPrincipalFromExpiredToken(accessToken);
                 if (principal == null)
                 {
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = "Access token/Refresh token inválido(s)",
+                        Retorno = tokenModel
+                    };
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                     0, 0, JsonConvert.SerializeObject(tokenModel), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "Erro na Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
-                    return BadRequest("Invalid access token/refresh token");
+                    return BadRequest(logWebService.Mensagem);
                 }
 
                 UserModel objUser = new UserModel();
@@ -219,14 +267,21 @@ namespace WebsupplyHHemo.API.Controllers
                 if (objUser == null || objUser.RefreshToken != refreshToken ||
                            objUser.RefreshTokenExpiryTime <= DateTime.Now)
                 {
+                    // Instancia a model do Log
+                    logWebService = new LogWebService()
+                    {
+                        Mensagem = "Access token/Refresh token inválido(s)",
+                        Retorno = objUser
+                    };
+
                     // Gera Log
                     objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                     0, 0, JsonConvert.SerializeObject(objUser), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                     0, 0, JsonConvert.SerializeObject(logWebService), null, "erro na Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                      "L", "", "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
-                    return BadRequest("Invalid access token/refresh token");
+                    return BadRequest(logWebService.Mensagem);
                 }
 
                 var newAccessToken = CreateToken(principal.Claims.ToList());
@@ -236,9 +291,16 @@ namespace WebsupplyHHemo.API.Controllers
 
                 TokenADO.TOKEN_INSUPD(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objUser);
 
+                // Instancia a model do Log
+                logWebService = new LogWebService()
+                {
+                    Mensagem = "Renovação de Token realizada com sucesso",
+                    Retorno = objUser
+                };
+
                 // Gera Log
                 objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
-                                 0, 0, JsonConvert.SerializeObject(objUser), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 0, 0, JsonConvert.SerializeObject(logWebService), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
                                  "L", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
