@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using WebsupplyHHemo.Interface.Model;
 using WebsupplyHHemo.Interface.Funcoes;
+using WebsupplyHHemo.API.Attributes;
+using Newtonsoft.Json;
 
 namespace WebsupplyHHemo.API.Controllers
 {
@@ -16,16 +18,25 @@ namespace WebsupplyHHemo.API.Controllers
     public class ComplementoContabilItemController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly string _ambiente;
+        private static int _transacao;
+        private static int _servico;
+        private static string _identificador;
 
         public ComplementoContabilItemController(IConfiguration configuration)
         {
             _configuration = configuration;
+            _ambiente = _configuration.GetValue<string>("Parametros:Ambiente");
         }
 
         [HttpPost]
         [Route("complemento-item")]
+        [Servico(18)]
         public ObjectResult ComplementoItem(ComplementoContabilItemRequestDto objRequest)
         {
+            // Instancia o obj do Log
+            Class_Log_Hhemo objLog;
+
             // Pega a Claims
             ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
             UserModel objUser = HelperClaims.CarregarUsuario(identity);
@@ -35,26 +46,36 @@ namespace WebsupplyHHemo.API.Controllers
             objRequest.CodProtheus = objRequest.CodProtheus.Trim();
             objRequest.ContaContabil = objRequest.ContaContabil.Trim();
 
-            // Instancia o ADO do Log
-            LogDeOperacaoModel objLog = new LogDeOperacaoModel();
-
             try
             {
+                // Pega o Atributo de Serviço
+                var servicoAttribute = (ServicoAttribute)Attribute.GetCustomAttribute(
+                    typeof(AutenticacaoController).GetMethod(nameof(ComplementoItem)),
+                    typeof(ServicoAttribute));
+
+                // Seta os parametros inicias do Log
+                _transacao = 0;
+                _servico = servicoAttribute.IDServico;
+                _identificador = "ComplementoItem" + Mod_Gerais.RetornaIdentificador();
+
+                // Gera Log
+                objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                                 0, 0, JsonConvert.SerializeObject(objRequest), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 "L", "", "", Mod_Gerais.MethodName());
+                objLog.GravaLog();
+                objLog = null;
+
                 // Instancia o ADO do Complemento Contabil do Item
                 ComplementoContabilItemADO objADO = new ComplementoContabilItemADO();
 
                 if (!objADO.ATUALIZA_DADOS_CONTABEIS_ITEM(_configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), objRequest))
                 {
-                    // Gera o Log de Operação
-                    objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
-                    objLog.cDetalhe = objADO.strMensagem;
-                    objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-                    LogsADO.GERA_LOGDEOPERACAO(
-                        _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
-                        objUser,
-                        objLog
-                    );
+                    // Gera Log
+                    objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                                     0, 0, JsonConvert.SerializeObject(objADO), null, "Erro na Chamada da API Rest - Método " + Mod_Gerais.MethodName(),
+                                     "L", "", "", Mod_Gerais.MethodName());
+                    objLog.GravaLog();
+                    objLog = null;
 
                     return new ObjectResult(new
                     {
@@ -63,16 +84,12 @@ namespace WebsupplyHHemo.API.Controllers
                     { StatusCode = 500 };
                 }
 
-                // Gera o Log de Operação
-                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Conta_Contabil_Integracao");
-                objLog.cDetalhe = objADO.strMensagem;
-                objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-                LogsADO.GERA_LOGDEOPERACAO(
-                    _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
-                    objUser,
-                    objLog
-                );
+                // Gera Log
+                objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                                 0, 0, JsonConvert.SerializeObject(objADO), null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
+                                 "L", "", "", Mod_Gerais.MethodName());
+                objLog.GravaLog();
+                objLog = null;
 
                 return new ObjectResult(new
                 {
@@ -85,16 +102,12 @@ namespace WebsupplyHHemo.API.Controllers
                 // Inicializa a Model de Excepetion
                 ExcepetionModel excepetionEstruturada = new ExcepetionModel(ex, true);
 
-                // Gera o Log de Operação
-                objLog.nCod_Operacao = _configuration.GetValue<int>("Parametros:LogDeOperacao:Operacoes_Tipos-Codigo_Recebimento_Fiscal_Integracao");
-                objLog.cDetalhe = excepetionEstruturada.Mensagem;
-                objLog.cIP = Request.HttpContext.Connection.RemoteIpAddress.ToString();
-
-                LogsADO.GERA_LOGDEOPERACAO(
-                        _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
-                        objUser,
-                        objLog
-                    );
+                // Gera Log
+                objLog = new Class_Log_Hhemo(_identificador, _transacao, _servico,
+                                 1, -1, JsonConvert.SerializeObject(excepetionEstruturada), null, excepetionEstruturada.Mensagem,
+                                 "L", "", "", Mod_Gerais.MethodName());
+                objLog.GravaLog();
+                objLog = null;
 
                 // Devolve o Erro
                 return new ObjectResult(new
