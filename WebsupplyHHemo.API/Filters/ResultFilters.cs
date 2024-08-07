@@ -36,6 +36,7 @@ namespace WebsupplyHHemo.API.Filters
                 {
                     Identificador = _identificador,
                     Transacao = _transacao,
+                    Origem = context.HttpContext.Request.Path,
                     Servico = _servico,
                     Errors = context.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()
                 };
@@ -44,8 +45,6 @@ namespace WebsupplyHHemo.API.Filters
                                     1, -1, JsonConvert.SerializeObject(logModel), null, "Erro de validação",
                                     "E", "", "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
-
-                context.Result = new BadRequestObjectResult(context.ModelState);
             }
         }
 
