@@ -6,16 +6,16 @@ using WebsupplyHHemo.Interface.Funcoes;
 
 namespace WebsupplyHHemo.API.Filters
 {
-    public class ValidacaoModelFilter : IActionFilter
+    public class ResourceFilters : IResourceFilter
     {
         private readonly IConfiguration _configuration;
 
-        public ValidacaoModelFilter(IConfiguration configuration)
+        public ResourceFilters(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public void OnResourceExecuting(ResourceExecutingContext context)
         {
             var actionDescriptor = (Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor;
             var servicoAttribute = actionDescriptor.MethodInfo.GetCustomAttributes(typeof(ServicoAttribute), false).FirstOrDefault() as ServicoAttribute;
@@ -49,7 +49,7 @@ namespace WebsupplyHHemo.API.Filters
             }
         }
 
-        public void OnActionExecuted(ActionExecutedContext context)
+        public void OnResourceExecuted(ResourceExecutedContext context)
         {
             // Não implementado
         }
