@@ -27,7 +27,7 @@ namespace WebsupplyHHemo.Interface.Funcoes
         {
             AssemblySettings settings = new AssemblySettings();
 #if DEBUG
-            return settings["appConexaoHHemoProd"].ToString();
+            return settings["appConexaoHHemoDev"].ToString();
 #else
             return settings["appConexaoHhemoProd"].ToString();
 #endif
