@@ -28,8 +28,11 @@ namespace WebsupplyHHemo.API.ADO
                     {
                         Erro = reader["Erro"].ToString().Trim();
                     }
+                    reader.NextResult();
                 }
             }
+
+            Conn.Dispose();
 
             if (Erro == "0")
             {
