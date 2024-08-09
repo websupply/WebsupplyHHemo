@@ -9,6 +9,8 @@ namespace WebsupplyHHemo.API.ADO
 
         public bool ATUALIZA_DADOS_CONTABEIS_ITEM(string Connection, ComplementoContabilItemRequestDto objRequest)
         {
+            string Erro = string.Empty;
+
             ConexaoSQLServer Conn = new ConexaoSQLServer(Connection);
 
             string NomeProcedure = "SP_HHemo_WS_Produtos_Precos_CCONTABIL_CLI_UPD";
@@ -18,22 +20,27 @@ namespace WebsupplyHHemo.API.ADO
             parametros.Add(new SqlParameter("@cCodProdutoCompleto", objRequest.CodProtheus));
             parametros.Add(new SqlParameter("@cCCONTABIL_CLI", objRequest.ContaContabil));
 
-            try
+            using (var reader = Conn.ExecutaComParametros(NomeProcedure, parametros))
             {
-                Conn.ExecutaComParametrosSemRetorno(NomeProcedure, parametros);
+                while (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        Erro = reader["Erro"].ToString().Trim();
+                    }
+                }
+            }
 
-                Conn.Dispose();
-
-                strMensagem = $"Atualização de Conta Contabil para o Produto com Sucesso. Parametros Enviados - CodWebsupply: [{objRequest.CodWebsupply}], CodProtheus: [{objRequest.CodProtheus}], ContaContabil: [{objRequest.ContaContabil}]";
+            if (Erro == "0")
+            {
+                strMensagem = $"Atualização de Conta Contabil para o Produto com o CodWebsupply: [{objRequest.CodProtheus}] e CodProtheus: [{objRequest.CodProtheus}] com Sucesso";
                 
                 return true;
             }
-            catch(Exception ex)
+            else
             {
-                Conn.Dispose();
-
-                strMensagem = $"Erro durante a Atualização de Conta Contabil para o Produto. Parametros Enviados - CodWebsupply: [{objRequest.CodWebsupply}], CodProtheus: [{objRequest.CodProtheus}], ContaContabil: [{objRequest.ContaContabil}]";
-
+                strMensagem = $"Nenhum Produto localizado com o CodWebsupply: [{objRequest.CodWebsupply}] e CodProtheus: [{objRequest.CodProtheus}].";
+                
                 return false;
             }
         }
