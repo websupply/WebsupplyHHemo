@@ -283,6 +283,15 @@ namespace WebsupplyHHemo.Interface.Metodos
                         }
                     }
 
+                    // Remove o Tipo da estrutura de Itens do Pré Nota
+                    if(recebimento.PRENOTA_ITENS.Count > 0)
+                    {
+                        for(var i = 0; i < recebimento.PRENOTA_ITENS.Count; i++)
+                        {
+                            recebimento.PRENOTA_ITENS[i].Tipo = string.Empty;
+                        }
+                    }
+
                     // Serializa o objeto para JSON
                     string jsonRequestBody = JsonConvert.SerializeObject(recebimento);
 
