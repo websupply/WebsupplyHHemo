@@ -26,6 +26,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         // Paramêtros de Controle da Classe
         public int intCodRecComWebsupply = 0;
         public int intCodNFWebsupply = 0;
+        public string tipo_processo = string.Empty;
         public string strFuncao = string.Empty; // Enviar - Cancelar
 
         private static int intNumTransacao
@@ -46,6 +47,9 @@ namespace WebsupplyHHemo.Interface.Metodos
             bool retorno = false;
             Class_Log_Hhemo objLog;
 
+            // Controle de Chave Local
+            string ChaveLocal = intCodRecComWebsupply == 0 ? intCodNFWebsupply.ToString() : intCodRecComWebsupply.ToString();
+
             try
             {
                 // Verifica se a Funcao enviada está dentro do esperado
@@ -58,7 +62,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, "", null, strMensagem,
-                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", ChaveLocal, "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -71,7 +75,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
-                                 "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                 "L", ChaveLocal, "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
@@ -81,7 +85,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 {
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                                        1, -1, "", null, "Erro ao recuperar dados do serviço",
-                                                       "", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                                       "", ChaveLocal, "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
                     strMensagem = "Erro ao recuperar dados do serviço";
@@ -98,6 +102,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                 arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
                 arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                arrParam.Add(new Parametro("@tipo_processo", tipo_processo, SqlDbType.Char, 2, ParameterDirection.Input));
 
                 ArrayList arrOut = new ArrayList();
                 DataTable DadosRecebimento = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Sel", arrParam), ref arrOut).Tables[0];
@@ -138,6 +143,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                     arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
                     arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@tipo_processo", tipo_processo, SqlDbType.Char, 2, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
                     DataTable DadosItens = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Itens_Sel", arrParam), ref arrOut).Tables[0];
@@ -179,7 +185,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                 D1_VLDESC = Decimal.Parse(registro["D1_VLDESC"].ToString().Trim()),
                                 D1_MSBLQL = registro["D1_MSBLQL"].ToString().Trim(),
                                 ID_ITEMP = int.Parse(registro["ID_ITEMP"].ToString().Trim()),
-                                Tipo = registro["Tipo"].ToString().Trim(),
+                                Tipo = tipo_processo,
                                 LOTES = new List<Lote>()
                             };
 
@@ -192,7 +198,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             arrParam.Add(new Parametro("@CDGPED", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
                             arrParam.Add(new Parametro("@ID_ITEMP", item.ID_ITEMP, SqlDbType.Int, 4, ParameterDirection.Input));
-                            arrParam.Add(new Parametro("@cTipo", item.Tipo, SqlDbType.Char, 2, ParameterDirection.Input));
+                            arrParam.Add(new Parametro("@cTipo", tipo_processo, SqlDbType.Char, 2, ParameterDirection.Input));
 
                             arrOut = new ArrayList();
                             DataTable DadosLote = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHEMO_WS_RECEBIMENTO_CONTROLE_SEL", arrParam), ref arrOut).Tables[0];
@@ -226,12 +232,12 @@ namespace WebsupplyHHemo.Interface.Metodos
                     else
                     {
                         // Define a mensagem de erro
-                        strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum item associado ao Pedido Nº {intCodRecComWebsupply}";
+                        strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum item associado {(intCodRecComWebsupply == 0 ? "a Nota" : "ao Pedido")} Nº {(intCodRecComWebsupply == 0 ? intCodNFWebsupply.ToString() : intCodRecComWebsupply.ToString())}";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, 0, "", null, strMensagem,
-                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", ChaveLocal, "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -246,6 +252,7 @@ namespace WebsupplyHHemo.Interface.Metodos
 
                     arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
                     arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@tipo_processo", tipo_processo, SqlDbType.Char, 2, ParameterDirection.Input));
 
                     arrOut = new ArrayList();
                     DataTable DadosAnexos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Anexos_Sel", arrParam), ref arrOut).Tables[0];
@@ -270,10 +277,11 @@ namespace WebsupplyHHemo.Interface.Metodos
                             };
 
                             // Consulta o Caminho Base dos Arquivos
-                            string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
+                            //string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
 
                             // Define o caminho completo do arquivo
-                            string pathCompleto = pathBase + $@"\Arquivos\recebimentos\{intCodRecComWebsupply}\{anexo.DOC}";
+                            //string pathCompleto = pathBase + $@"\Arquivos\recebimentos\{intCodRecComWebsupply}\{anexo.DOC}";
+                            string pathCompleto = registro["PATH_COMPLETO"].ToString().Trim();
 
                             // Adiciona o Base64 ao objeto Anexo
                             anexo.DOCX64 = Mod_Gerais.ArquivoParaBase64(pathCompleto);
@@ -311,7 +319,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, JsonConvert.SerializeObject(recebimento), null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", ChaveLocal, "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -342,7 +350,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Gera Log com o retorno da API
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", ChaveLocal, "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -378,7 +386,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                                     // Gera Log com o retorno da API
                                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                                      0, (int)response.StatusCode, retornoAPIModel, null, "Erro no Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                                     "L", ChaveLocal, "", Mod_Gerais.MethodName());
                                     objLog.GravaLog();
                                     objLog = null;
 
@@ -388,12 +396,12 @@ namespace WebsupplyHHemo.Interface.Metodos
                         }
 
                         // Define a mensagem de sucesso
-                        strMensagem = $"Recebimento Nº {intCodRecComWebsupply} {(strFuncao.ToString().Trim() == "Enviar" ? "cadastrado(a)" : "atualizado(a)")} com sucesso.";
+                        strMensagem = $"Recebimento do {(intCodRecComWebsupply == 0 ? "a Nota" : "ao Pedido")} Nº {(intCodRecComWebsupply == 0 ? intCodNFWebsupply.ToString() : intCodRecComWebsupply.ToString())} {(strFuncao.ToString().Trim() == "Enviar" ? "cadastrado(a)" : "atualizado(a)")} com sucesso.";
 
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, 0, "", null, strMensagem,
-                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", ChaveLocal, "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -408,7 +416,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, (int)response.StatusCode, "", null, strMensagem,
-                                         "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                         "L", ChaveLocal, "", Mod_Gerais.MethodName());
                         objLog.GravaLog();
                         objLog = null;
 
@@ -418,12 +426,12 @@ namespace WebsupplyHHemo.Interface.Metodos
                 else
                 {
                     // Define a mensagem de erro
-                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente ao Pedido Nº {intCodRecComWebsupply}";
+                    strMensagem = $"Não foi possível realizar a operação, pois não foi retornando nenhum dado referente {(intCodRecComWebsupply == 0 ? "a Nota" : "ao Pedido")} Nº {(intCodRecComWebsupply == 0 ? intCodNFWebsupply.ToString() : intCodRecComWebsupply.ToString())}";
 
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, "", null, strMensagem,
-                                     "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                     "L", ChaveLocal, "", Mod_Gerais.MethodName());
                     objLog.GravaLog();
                     objLog = null;
 
@@ -441,7 +449,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  1, -1, JsonConvert.SerializeObject(excepetionEstruturada), null, strMensagem,
-                                 "L", intCodRecComWebsupply.ToString(), "", Mod_Gerais.MethodName());
+                                 "L", ChaveLocal, "", Mod_Gerais.MethodName());
                 objLog.GravaLog();
                 objLog = null;
 
