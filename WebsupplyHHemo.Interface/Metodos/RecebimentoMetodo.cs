@@ -277,11 +277,11 @@ namespace WebsupplyHHemo.Interface.Metodos
                             };
 
                             // Consulta o Caminho Base dos Arquivos
-                            //string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
+                            string pathBase = Mod_Gerais.ConsultaParametroConfig("DriveFisicoArquivos");
 
                             // Define o caminho completo do arquivo
                             //string pathCompleto = pathBase + $@"\Arquivos\recebimentos\{intCodRecComWebsupply}\{anexo.DOC}";
-                            string pathCompleto = registro["PATH_COMPLETO"].ToString().Trim();
+                            string pathCompleto = pathBase + registro["PATH_COMPLETO"].ToString().Trim();
 
                             // Adiciona o Base64 ao objeto Anexo
                             anexo.DOCX64 = Mod_Gerais.ArquivoParaBase64(pathCompleto);
