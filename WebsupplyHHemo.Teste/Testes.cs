@@ -149,5 +149,14 @@ namespace WebsupplyHHemo.Teste
             Console.WriteLine(usuarioUnidadeMetodo.ConsomeWS());
             Console.WriteLine(usuarioUnidadeMetodo.strMensagem);
         }
+
+        [TestMethod]
+        public void InterfaceConversaUnidadeMedida()
+        {
+            ConversaoUnidadeMedidaMetodo conversaoUnidadeMedidaMetodo = new ConversaoUnidadeMedidaMetodo();
+
+            Console.WriteLine(conversaoUnidadeMedidaMetodo.ConsomeWS());
+            Console.WriteLine(conversaoUnidadeMedidaMetodo.strMensagem);
+        }
     }
 }

@@ -58,6 +58,7 @@
     <Compile Include="Funcoes\Mod_Gerais.cs" />
     <Compile Include="Metodos\CentroCustoMetodo.cs" />
     <Compile Include="Metodos\CondicaoPagtoMetodo.cs" />
+    <Compile Include="Metodos\ConversaoUnidadeMedidaMetodo.cs" />
     <Compile Include="Metodos\FormaPagtoMetodo.cs" />
     <Compile Include="Metodos\FornecedorMetodo.cs" />
     <Compile Include="Metodos\GrupoItensMetodo.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Metodos\UsuarioUnidadeMetodo.cs" />
     <Compile Include="Model\CentroCustoModel.cs" />
     <Compile Include="Model\CondicaoPagtoModel.cs" />
+    <Compile Include="Model\ConversaoUnidadeMedidaModel.cs" />
     <Compile Include="Model\ExcepetionModel.cs" />
     <Compile Include="Model\FormaPagtoModel.cs" />
     <Compile Include="Model\FornecedorModel.cs" />
