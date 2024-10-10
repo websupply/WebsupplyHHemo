@@ -36,7 +36,7 @@ Será necessário atualizar as dll's dentro do servidor em questão ou utilizar 
 
 1. Clone o repositório:
     ```bash
-    git clone https://github.com/lgjhunzecher/WebsupplyHHemo.git
+    git clone https://github.com/websupply/WebsupplyHHemo.git
     ```
 2. Navegue até o diretório do projeto:
     ```bash
