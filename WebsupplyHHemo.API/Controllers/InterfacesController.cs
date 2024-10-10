@@ -145,6 +145,14 @@ namespace WebsupplyHHemo.API.Controllers
                     retornoInterface = usuarioUnidadeMetodo.ConsomeWS();
                     strMensagem = usuarioUnidadeMetodo.strMensagem;
                     break;
+                case "conversao-unidades-medidas":
+                    ConversaoUnidadeMedidaMetodo conversaoUnidadeMedidaMetodo = new ConversaoUnidadeMedidaMetodo();
+
+                    conversaoUnidadeMedidaMetodo.strCodFilial = codFilial;
+
+                    retornoInterface = conversaoUnidadeMedidaMetodo.ConsomeWS();
+                    strMensagem = conversaoUnidadeMedidaMetodo.strMensagem;
+                    break;
                 default:
                     retornoInterface = false;
                     strMensagem = $"Metodo {interfaceWS.ToLower()} não existe ou não está parametrizado";
