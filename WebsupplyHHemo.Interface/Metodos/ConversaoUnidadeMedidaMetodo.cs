@@ -22,7 +22,7 @@ namespace WebsupplyHHemo.Interface.Metodos
         string strIdentificador = "ConvUndMed" + Mod_Gerais.RetornaIdentificador();
 
         public string strMensagem = string.Empty;
-        public string strCodFilial = string.Empty;
+        public string strCodFilial = "01010001";
 
 
         private static int intNumTransacao
