@@ -21,9 +21,10 @@ namespace WebsupplyHHemo.Interface.Metodos
         static int _intNumServico = 22;
         string strIdentificador = "ConvUndMed" + Mod_Gerais.RetornaIdentificador();
 
+        // Paramêtros de Controle da Classe
+        public string strAmbiente = null;
         public string strMensagem = string.Empty;
         public string strCodFilial = "01010001";
-
 
         private static int intNumTransacao
         {
@@ -51,7 +52,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  0, 0, "", null, "Inicio do Método " + Mod_Gerais.MethodName(),
-                                 "L", "", "", Mod_Gerais.MethodName());
+                                 "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                 objLog.GravaLog();
                 objLog = null;
 
@@ -61,7 +62,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 {
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                                        1, -1, "", null, "Erro ao recuperar dados do serviço",
-                                                       "", "", "", Mod_Gerais.MethodName());
+                                                       "", "", "", Mod_Gerais.MethodName(), strAmbiente);
                     objLog.GravaLog();
                     objLog = null;
                     strMensagem = "Erro ao recuperar dados do serviço";
@@ -71,7 +72,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 { _intNumTransacao -= 1; }
 
                 // Realiza a Chamada do Banco
-                Conexao conn = new Conexao(Mod_Gerais.ConnectionString());
+                Conexao conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));
 
                 // Limpa os Dados da Tabela Temporária
                 ArrayList arrParam = new ArrayList();
@@ -121,7 +122,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Gera Log
                             objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                              0, 0, jsonRequestBody, null, "Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                             "L", "", "", Mod_Gerais.MethodName());
+                                             "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                             objLog.GravaLog();
                             objLog = null;
 
@@ -154,7 +155,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             // Gera Log com o retorno da API
                             objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                              0, (int)response.StatusCode, responseBody, null, "Retorno da Chamada a API Rest - Método " + Mod_Gerais.MethodName(),
-                                             "L", "", "", Mod_Gerais.MethodName());
+                                             "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                             objLog.GravaLog();
                             objLog = null;
 
@@ -167,7 +168,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                             if (retornoAPI.Count > 0)
                             {
                                 // Realiza a Chamada do Banco
-                                conn = new Conexao(Mod_Gerais.ConnectionString());
+                                conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));
 
                                 // Percorre Todos os Resultados
                                 for (int j = 0; j < retornoAPI.Count; j++)
@@ -237,14 +238,14 @@ namespace WebsupplyHHemo.Interface.Metodos
                         // Gera Log
                         objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                          0, 0, "", null, strMensagem,
-                                         "L", "", "", Mod_Gerais.MethodName());
+                                         "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                         objLog.GravaLog();
                         objLog = null;
                     }
 
 
                     // Realiza a Chamada do Banco
-                    conn = new Conexao(Mod_Gerais.ConnectionString());
+                    conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));
 
                     // Limpa os Dados da Tabela Temporária
                     arrParam = new ArrayList();
@@ -261,7 +262,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                     // Gera Log
                     objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                      0, 0, "", null, strMensagem,
-                                     "L", "", "", Mod_Gerais.MethodName());
+                                     "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                     objLog.GravaLog();
                     objLog = null;
                 }
@@ -279,7 +280,7 @@ namespace WebsupplyHHemo.Interface.Metodos
                 // Gera Log
                 objLog = new Class_Log_Hhemo(strIdentificador, intNumTransacao, _intNumServico,
                                  1, -1, JsonConvert.SerializeObject(excepetionEstruturada), null, strMensagem,
-                                 "L", "", "", Mod_Gerais.MethodName());
+                                 "L", "", "", Mod_Gerais.MethodName(), strAmbiente);
                 objLog.GravaLog();
                 objLog = null;
 

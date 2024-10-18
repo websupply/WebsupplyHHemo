@@ -155,7 +155,7 @@ namespace WebsupplyHHemo.Teste
         {
             ConversaoUnidadeMedidaMetodo conversaoUnidadeMedidaMetodo = new ConversaoUnidadeMedidaMetodo();
 
-            conversaoUnidadeMedidaMetodo.strCodFilial = "01010001";
+            conversaoUnidadeMedidaMetodo.strCodFilial = "02010001";
 
             Console.WriteLine(conversaoUnidadeMedidaMetodo.ConsomeWS());
             Console.WriteLine(conversaoUnidadeMedidaMetodo.strMensagem);

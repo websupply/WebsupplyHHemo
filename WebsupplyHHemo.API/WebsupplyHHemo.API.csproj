@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -25,8 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebsupplyHHemo.InterfaceNew\WebsupplyHHemo.InterfaceNew.csproj" />
-    <ProjectReference Include="..\WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj" />
+    <ProjectReference Include="..\WebsupplyHHemo.InterfaceNew\WebsupplyHHemo.Interface.csproj" />
   </ItemGroup>
 
   <ItemGroup>

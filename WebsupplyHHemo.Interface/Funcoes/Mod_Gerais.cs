@@ -23,14 +23,35 @@ namespace WebsupplyHHemo.Interface.Funcoes
         public const string strRequiredMessage = "O campo [{0}] deve ser preenchido.";
         public const string strMaxErrorMessage = "O campo [{0}] pode ter no máximo {1} caracteres.";
 
-        public static string ConnectionString()
+        public static string ConnectionString(string? Ambiente = null)
         {
             AssemblySettings settings = new AssemblySettings();
-#if DEBUG
-            return settings["appConexaoHHemoDev"].ToString();
-#else
-            return settings["appConexaoHhemoProd"].ToString();
-#endif
+
+            Ambiente = Ambiente == null ? RetornaAmbiente() : Ambiente;
+
+            return Ambiente switch
+            {
+                "PRD" => settings["appConexaoHHemoProd"].ToString(),
+                "PRE" => settings["appConexaoHHemoPre"].ToString(),
+                "HOM" => settings["appConexaoHHemoHom"].ToString(),
+                _ => settings["appConexaoHHemoDev"].ToString()
+            };
+        }
+
+        public static string RetornaAmbiente()
+        {
+            string strNomeMaquina = Environment.MachineName;
+
+            return strNomeMaquina switch
+            {
+                "SRVWEB1" => "PRD",
+                "SRVWEB1N" => "PRD",
+                "SRVWEB2" => "PRD",
+                "SRVWEB2N" => "PRD",
+                "SRVWEBPREPRD" => "PRE",
+                "SRVHOMOLOG" => "HOM",
+                _ => "DEV",
+            };
         }
 
         public static string MethodName()
