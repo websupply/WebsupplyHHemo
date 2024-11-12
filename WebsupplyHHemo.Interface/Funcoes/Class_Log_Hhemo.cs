@@ -35,7 +35,7 @@ namespace WebsupplyHHemo.Interface.Funcoes
         #endregion
 
         public Class_Log_Hhemo(string _strIdentificador, int _intNumTransacao, int _intIdServico, int _intIDErro, int _Status, object _strConteudoSoap, Class_MensagemRetorno.Class_Erros[] _arrDetalhe, string _strDados,
-                        string _strLocalOrigem, string _strChaveLocal, string _strChaveRemoto, string _strMetodoOrigem, string? _strAmbiente = null)
+                        string _strLocalOrigem, string _strChaveLocal, string _strChaveRemoto, string _strMetodoOrigem, string _strAmbiente = null)
         {
             strIDTransacao = _strIdentificador;
             intNumTransacao = _intNumTransacao;
@@ -57,7 +57,7 @@ namespace WebsupplyHHemo.Interface.Funcoes
 
         public void GravaLog()
         {
-            Conexao _Conn = new Conexao(Mod_Gerais.ConnectionString());
+            Conexao _Conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));
             try
             {
                 _ArrParam = new ArrayList();
