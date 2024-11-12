@@ -132,9 +132,51 @@ namespace WebsupplyHHemo.Interface.Metodos
                         F1_TIPO = DadosRecebimento.Rows[0]["F1_TIPO"].ToString().Trim(),
                         F1_XML = DadosRecebimento.Rows[0]["F1_XML"].ToString().Trim(),
                         UUID_WEBSUPPLY = DadosRecebimento.Rows[0]["UUID_WEBSUPPLY"].ToString().Trim(),
+                        TITULOS = new List<RecebimentoModel.Titulos>(),
                         ANEXOS = new List<RecebimentoModel.Anexo>(),
                         PRENOTA_ITENS = new List<RecebimentoModel.Item>()
                     };
+
+                    // Realiza a Chamada do Banco
+                    conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));
+
+                    // Cria o Parametro da query do banco
+                    arrParam = new ArrayList();
+
+                    arrParam.Add(new Parametro("@iCdgPed", intCodRecComWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@iCodNF", intCodNFWebsupply, SqlDbType.Int, 4, ParameterDirection.Input));
+                    arrParam.Add(new Parametro("@tipo_processo", tipo_processo, SqlDbType.Char, 2, ParameterDirection.Input));
+
+                    arrOut = new ArrayList();
+                    DataTable DadosTitulos = conn.ExecuteStoredProcedure(new StoredProcedure("SP_HHemo_WS_Recebimento_Parcelas_Sel", arrParam), ref arrOut).Tables[0];
+
+                    // Encerra a Conexão com Banco de Dados
+                    conn.Dispose();
+
+                    // Verifica se Existe Titulos para o pedido e caso sim, traz
+                    // os itens e caso não, retorna erro
+                    if (DadosTitulos.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < DadosTitulos.Rows.Count; i++)
+                        {
+                            // Pega a Linha do Registro
+                            var registro = DadosTitulos.Rows[i];
+
+                            // Carrega os Dados do item
+                            RecebimentoModel.Titulos titulo = new RecebimentoModel.Titulos
+                            {
+                                PARCELA = registro["PARCELA"].ToString().Trim(),
+                                VALOR = registro["VALOR"].ToString().Trim(),
+                                VENCIMENTO = registro["VENCIMENTO"].ToString().Trim(),
+                                FORMAPGTO = registro["FORMAPGTO"].ToString().Trim(),
+                                LINHADIG = registro["LINHADIG"].ToString().Trim(),
+                                CODIGOBARRA = registro["CODIGOBARRA"].ToString().Trim(),
+                            };
+
+                            // Adiciona a Array de Itens
+                            recebimento.TITULOS.Add(titulo);
+                        }
+                    }
 
                     // Realiza a Chamada do Banco
                     conn = new Conexao(Mod_Gerais.ConnectionString(strAmbiente));

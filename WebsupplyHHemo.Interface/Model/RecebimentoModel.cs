@@ -24,6 +24,7 @@ namespace WebsupplyHHemo.Interface.Model
         public string F1_TIPO { get; set; } 
         public string F1_XML { get; set; } 
         public string UUID_WEBSUPPLY { get; set; }
+        public List<Titulos> TITULOS { get; set; }
         public List<Anexo> ANEXOS { get; set; }
         public List<Item> PRENOTA_ITENS { get; set; }
 
@@ -67,6 +68,16 @@ namespace WebsupplyHHemo.Interface.Model
             public string Tipo { get; set; }
             public int ID_ITEMP { get; set; }
             public List<Lote> LOTES { get; set; }
+        }
+
+        public class Titulos
+        {
+            public string PARCELA { get; set; }
+            public string VALOR { get; set; }
+            public string VENCIMENTO { get; set; }
+            public string FORMAPGTO { get; set; }
+            public string LINHADIG { get; set; }
+            public string CODIGOBARRA { get; set; }
         }
     }
 }
