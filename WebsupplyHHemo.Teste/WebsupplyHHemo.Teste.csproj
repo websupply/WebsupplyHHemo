@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebsupplyHHemo.HotFix\WebsupplyHHemo.HotFix.csproj" />
     <ProjectReference Include="..\WebsupplyHHemo.Interface\WebsupplyHHemo.Interface.csproj" />
   </ItemGroup>
 
